@@ -1,0 +1,6 @@
+Srno,No. of Instances,OS with version,Machine Class,Machine Family,Series,Machine Type,vCPUs,RAM,BootDisk Type,BootDisk Capacity,Gpu no,Gpu Type,WorkStation,Datacenter Location,Avg no. of hrs,Hrs/Min,Days/Month,Zonal/Regional,HDD,SSD,Balanced SSD,Snapshot
+1,2.0,win,,,n2d,STANDARD,16,32,,,,,,asia-south1,,,,,,,,
+2,4.0,win,,,n2,STANDARD,32,128,,,,,,asia-south1,,,,,,,,
+3,5.0,rhel,,,n1,STANDARD,16,60,,,,,,asia-south1,,,,,,,,
+4,20.0,rhel,,,n2,STANDARD,96,384,,,,,,asia-south1,,,,,,,,
+4,6.0,ubuntu,,,n2,STANDARD,96,384,,,,,,asia-south1,,,,,,,,
