@@ -1,6 +1,6 @@
 OS with version,No. of Instances,Machine Family,Estimated Cost,URL
-win,2,general purpose,1234,https://cloud.google.com/products/calculator?dl=CjhDaVJoTmpRME5qUmlaUzAwWldNM0xUUXlPVEl0T1RWbFlTMDBZVFV6TnpBMk9EQXdPRElRQVE9PRAIGiQ2MkYzOTVCNC0wNUEyLTQwRjAtQUY1NC02QzE1M0E5Q0ExNzY
-win,4,general purpose,1234,https://cloud.google.com/products/calculator?dl=CjhDaVJoTmpRME5qUmlaUzAwWldNM0xUUXlPVEl0T1RWbFlTMDBZVFV6TnpBMk9EQXdPRElRQVE9PRAIGiQ3OEQwNTYwNS0xNTI0LTQyODUtQjcxQS0xMjczOUFCNjI2MDk
-rhel,5,general purpose,1234,https://cloud.google.com/products/calculator?dl=CjhDaVJoTmpRME5qUmlaUzAwWldNM0xUUXlPVEl0T1RWbFlTMDBZVFV6TnpBMk9EQXdPRElRQVE9PRAIGiRBODQ5QjQxNy00NEUzLTQ0MTAtQjRBNi1BMzk1QTQzOEY2REI
+win,2,general purpose,Error,Error
+win,4,general purpose,Error,Error
+rhel,5,general purpose,Error,Error
 rhel,20,general purpose,Error,Error
 ubuntu,6,general purpose,Error,Error

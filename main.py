@@ -1,5 +1,3 @@
-import pandas as pd
-import re
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -7,9 +5,13 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
-import os
-import time
 from selenium.webdriver.support import expected_conditions as EC
+import time
+import os
+import pandas as pd
+import re
+import csv
+import glob
 
 
 # File paths
@@ -74,6 +76,21 @@ def get_machine_family_index(machine_family):
     }
     # Default to "general purpose" if the machine family is empty or invalid
     return machine_family_mapping.get(machine_family.lower(), 0)
+
+
+def extract_total_price(file_path):
+    """Extracts the 'Total Price' value from the downloaded CSV file."""
+    try:
+        with open(file_path, "r") as csvfile:
+            reader = csv.reader(csvfile)
+            for row in reader:
+                if "Total Price:" in row:
+                    return float(row[row.index("Total Price:") + 1])
+    except Exception as e:
+        print(f"Error reading the CSV file: {e}")
+        return None
+ 
+
 
 def process_row(driver, actions, os_name, no_of_instances,machine_family):
     """Processes a single row to calculate cost and retrieve URL."""
@@ -179,14 +196,26 @@ def process_row(driver, actions, os_name, no_of_instances,machine_family):
         #cost_element = driver.find_element(By.CSS_SELECTOR, "span.MyvX5d.D0aEmf")
         #cost = cost_element.text
         # Using aria-label
-        cost=1234
         wait = WebDriverWait(driver, 10)  # Timeout of 10 seconds
 
         download_button = wait.until(EC.visibility_of_element_located((By.XPATH, "//*[contains(@aria-label, 'Download estimate as .csv')]")))
         download_button.click()
+        downloaded_files = glob.glob(f"{download_directory}/*.csv")
+        if not downloaded_files:
+            return "Error", "Error"
+        latest_file = max(downloaded_files, key=os.path.getctime)
 
+        total_price = extract_total_price(latest_file)
+        print(f"Total Price: {total_price}")
+        os.remove(latest_file)
+
+        # Get the current URL
         current_url = driver.current_url
-        return cost, current_url
+
+        return total_price, current_url
+    
+    
+    
     except Exception as e:
         print(f"Error processing: {e}")
         return "Error", "Error"
