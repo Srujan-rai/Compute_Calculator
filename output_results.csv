@@ -1,6 +1,6 @@
-OS with version,No. of Instances,Machine Family,Estimated Cost,URL
-win,2,general purpose,Error,Error
-win,4,general purpose,Error,Error
-rhel,5,general purpose,Error,Error
-rhel,20,general purpose,Error,Error
-ubuntu,6,general purpose,Error,Error
+Row,OS with version,No. of Instances,Machine Family,Series,Machine Type,Pricing URLs
+1,win,2,,N2D,STANDARD,Error
+2,win,4,,N2,STANDARD,Error
+3,rhel,5,,N1,STANDARD,Error
+4,rhel,20,,N2,STANDARD,Error
+5,ubuntu,6,,N2,STANDARD,Error
