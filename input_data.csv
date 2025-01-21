@@ -1,0 +1,2 @@
+No. of Instances,OS with version,Machine Class,Machine Family,Series,Machine Type,vCPUs,RAM,BootDisk Type,BootDisk Capacity,Region
+2,Paid: Windows Server,standard,general purpose,N1,t2a-standard-2,2,4,Balanced SSD,20,Iowa (us-central1)

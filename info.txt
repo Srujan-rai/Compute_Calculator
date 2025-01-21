@@ -1,0 +1,131 @@
+os_mapping = {
+    "Free: Debian, CentOS, CoreOS, Ubuntu or BYOL (Bring Your Own License)": 0,
+    "Paid: Ubuntu Pro": 1,
+    "Paid: Windows Server 2012 R2, Windows Server 2016, Windows Server 2019, Windows Server (2004, 20H2)": 2,
+    "Paid: Red Hat Enterprise Linux": 3,
+    "Paid: Red Hat Enterprise Linux 7 with Extended Life Cycle Support Add-On": 4,
+    "Paid: Red Hat Enterprise Linux for SAP with HA and Update Services": 5,
+    "Paid: SLES": 6,
+    "Paid: SLES 12 for SAP": 7,
+    "Paid: SLES 15 for SAP": 8,
+    "Paid: SQL Server Standard (2012, 2014, 2016, 2017, 2019)": 9,
+    "Paid: SQL Server Web (2012, 2014, 2016, 2017, 2019)": 10,
+    "Paid: SQL Server Enterprise (2012, 2014, 2016, 2017, 2019)": 11,
+}
+
+
+
+machine_family_mapping = {
+    "General Purpose": 0,
+    "Compute-optimized": 1,
+    "Memory-optimized": 2,
+    "Accelerator-optimized": 3,
+    "Storage-optimized": 4,
+}
+
+
+general_purpose_series_mapping = {
+    "N1": 0,
+    "N2": 1,
+    "N4": 2,
+    "E2": 3,
+    "N2D": 4,
+    "T2A": 5,
+    "T2D": 6,
+    "C3": 7,
+    "C3D": 8,
+    "C4": 9,
+    "C4A": 10,
+}
+
+general_purpose_machine_type_mapping = {
+    "t2a-standard-1": 0,
+    "t2a-standard-2": 1,
+    "t2a-standard-4": 2,
+    "t2a-standard-8": 3,
+    "t2a-standard-16": 4,
+    "t2a-standard-32": 5,
+    "t2a-standard-48": 6,
+}
+
+
+general_purpose_series_mapping = {
+    "N1": 0,
+    "N2": 1,
+    "N4": 2,
+    "E2": 3,
+    "N2D": 4,
+    "T2A": 5,
+    "T2D": 6,
+    "C3": 7,
+    "C3D": 8,
+    "C4": 9,
+    "C4A": 10,
+}
+
+general_purpose_machine_type_mapping = {
+    "t2a-standard-1": 0,
+    "t2a-standard-2": 1,
+    "t2a-standard-4": 2,
+    "t2a-standard-8": 3,
+    "t2a-standard-16": 4,
+    "t2a-standard-32": 5,
+    "t2a-standard-48": 6,
+}
+
+compute_optimized_series_mapping = {
+    "C2": 0,
+    "C2D": 1,
+    "H3": 2,
+}
+
+compute_optimized_machine_type_mapping = {
+    "c2-standard-4": 0,
+    "c2-standard-8": 1,
+    "c2-standard-16": 2,
+    "c2-standard-30": 3,
+    "c2-standard-60": 4,
+}
+
+
+memory_optimized_series_mapping = {
+    "M1": 0,
+    "M2": 1,
+    "M3": 2,
+}
+
+memory_optimized_machine_type_mapping = {
+    "m1-megamem-96": 0,
+    "m1-ultramem-40": 1,
+    "m1-ultramem-80": 2,
+    "m1-ultramem-160": 3,
+}
+
+
+accelerator_optimized_series_mapping = {
+    "A2": 0,
+    "A3": 1,
+    "G2": 2,
+}
+
+accelerator_optimized_machine_type_mapping = {
+    "a3-highgpu-1g": 0,
+    "a3-highgpu-2g": 1,
+    "a3-highgpu-4g": 2, 
+    "a3-highgpu-8g": 3,
+}
+
+
+storage_optimized_series_mapping = {
+    "Z3": 0,
+}
+
+storage_optimized_machine_type_mapping = {
+    "z3-highmem-88": 0,
+    "z3-highmem-176": 1,
+}
+
+
+
+
+

@@ -74,7 +74,6 @@ def get_machine_family_index(machine_family):
         "accelerator optimized": 3,
         "storage optimized": 4,
     }
-    # Default to "general purpose" if the machine family is empty or invalid
     return machine_family_mapping.get(machine_family.lower(), 0)
 
 
@@ -92,10 +91,17 @@ def extract_total_price(file_path):
  
 
 
-def process_row(driver, actions, os_name, no_of_instances,machine_family):
+def process_row(driver, actions, os_name, no_of_instances,machine_family,series):
     """Processes a single row to calculate cost and retrieve URL."""
     os_index = get_os_index(os_name)
-    machine_family_index = get_machine_family_index(machine_family) 
+    machine_family_index = 0#0get_machine_family_index(machine_family) 
+    series_index=1
+    machine_type_index=1
+    disk_type=1
+    size=200
+    region_index=5
+    vcpu_value=8
+    memory_value=8
 
     def home_page():
         """Navigates to the pricing section."""
@@ -123,7 +129,6 @@ def process_row(driver, actions, os_name, no_of_instances,machine_family):
 
     def select_instance():
         """Handles the instance selection."""
-        print(no_of_instances)
         for _ in range(6):  # Navigate to instance dropdown
             actions.send_keys(Keys.TAB).perform()
             time.sleep(0.2)
@@ -138,50 +143,127 @@ def process_row(driver, actions, os_name, no_of_instances,machine_family):
 
     def select_machine_family():
         """Selects the machine family."""
+        print("now we are navigating to  machine family")
         for _ in range(6):  # Navigate to the machine family dropdown
             actions.send_keys(Keys.TAB).perform()
             time.sleep(0.2)
         actions.send_keys(Keys.ENTER).perform()
+        print("navigated to machine family")
         for _ in range(machine_family_index):  # Select the machine family (customize index if needed)
             actions.send_keys(Keys.ARROW_DOWN).perform()
             time.sleep(0.2)
         actions.send_keys(Keys.ENTER).perform()
+        print("machine family selected")
 
     def select_series():
         """Selects the series."""
-        actions.send_keys(Keys.TAB).perform()  # Navigate to the series dropdown
-        for _ in range(1):  # Select the series (customize index if needed)
+        print("navigating to series")
+        actions.send_keys(Keys.TAB).perform() 
+        actions.send_keys(Keys.ENTER).perform()# Navigate to the series dropdown
+        for _ in range(series_index):  # Select the series (customize index if needed)
             actions.send_keys(Keys.ARROW_DOWN).perform()
             time.sleep(0.2)
         actions.send_keys(Keys.ENTER).perform()
-        time.sleep(1)
+        time.sleep(0.2)
+        print("series selected")
 
     def machine_type():
         """Selects the machine type."""
-        actions.send_keys(Keys.TAB).perform()  # Navigate to the machine type dropdown
-        actions.send_keys(Keys.TAB).perform()
-        for _ in range(1):  # Select the machine type (customize index if needed)
+        actions.send_keys(Keys.TAB).perform()  
+        # Navigate to the machine type dropdown
+        actions.send_keys(Keys.ENTER).perform()
+        for _ in range(machine_type_index):  # Select the machine type (customize index if needed)
             actions.send_keys(Keys.ARROW_DOWN).perform()
             time.sleep(0.2)
         actions.send_keys(Keys.ENTER).perform()
+        print("machine type selected")
 
     def vcpu_and_memory():
         """Sets the vCPU and memory values."""
-        for _ in range(3):  # Navigate to vCPU input
+        for _ in range(5):  # Navigate to vCPU input
             actions.send_keys(Keys.TAB).perform()
             time.sleep(0.2)
-        time.sleep(0.2)
+        print("reached vcpu and memory")
+        
+        
         actions.send_keys(Keys.ENTER).perform()
-        actions.send_keys(8).perform()  # Enter the vCPU value
+        actions.send_keys(vcpu_value).perform()# Enter the vCPU value
+        print("vcpu selected")
 
+        print("navigating for memory ")
         for _ in range(3):  # Navigate to memory input
             actions.send_keys(Keys.TAB).perform()
             time.sleep(0.2)
-        time.sleep(0.2)
+    
         actions.send_keys(Keys.ENTER).perform()
-        actions.send_keys(8).perform()  # Enter the memory value
+        actions.send_keys(memory_value).perform() # Enter the memory value
+        print("memory selected")
+        
+        for _ in range(4): #TILL BOOT TYPE SECELCTOR WE DO THE PROGRESSION ALONG WITH EXTENDED MEMEORY ICON THAT TAKES 2 TABS
+            actions.send_keys(Keys.TAB).perform()
+            time.sleep(0.2)
+            
+       
+        
+    
+    
+    def boot_disk_type():
+        for _ in range(disk_type):
+            actions.send_keys(Keys.ARROW_RIGHT).perform()
+            time.sleep(0.2)
+        actions.send_keys(Keys.ENTER).perform()
+        print("boot disk type selected")
+    
+    def boot_disk_size():
+        for _ in range(3):
+            actions.send_keys(Keys.TAB).perform()
+            time.sleep(0.2)
+        actions.send_keys(size).perform()
+        
+    def sustained_user_discounts():
+        for _ in range(2):
+            actions.send_keys(Keys.TAB).perform()
+            time.sleep(0.2)
+        actions.send_keys(Keys.ENTER).perform()
+ 
+    def region():
+        for _ in range(6): #iterate towards the region
+            actions.send_keys(Keys.TAB).perform()
+            time.sleep(0.2)
+        actions.send_keys(Keys.ENTER).perform() #open the dropdown
+        for _ in range(region_index):
+            actions.send_keys(Keys.ARROW_DOWN).perform()
+            time.sleep(0.2)
+        actions.send_keys(Keys.ENTER).perform()
+    
+    def with_sud_princing():
+        for _ in range(4):
+            actions.send_keys(Keys.TAB).perform()
+            time.sleep(0.2)
+        actions.send_keys(Keys.ENTER).perform()
+    
+    
+    def one_year_commitment():
+        for _ in range(9):
+            actions.key_down(Keys.SHIFT).send_keys(Keys.TAB).key_up(Keys.SHIFT).perform()
+            time.sleep(0.2)
+        actions.send_keys(Keys.ENTER).perform()
+        for _ in range(9):
+            actions.send_keys(Keys.TAB).perform()
+            time.sleep(0.2)
+        actions.send_keys(Keys.ARROW_RIGHT).perform()
+        actions.send_keys(Keys.ENTER).perform()
+        
+    
+    def three_year_commitment():
+        actions.send_keys(Keys.ARROW_RIGHT).perform()
+        actions.send_keys(Keys.ENTER).perform()
+        
+        
+        
+        
 
-    # Navigate and set options
+    
     time.sleep(1)
     try:
         home_page()
@@ -190,29 +272,73 @@ def process_row(driver, actions, os_name, no_of_instances,machine_family):
         select_machine_family()
         select_series()
         machine_type()
-        #vcpu_and_memory()
+        valid_families_series = {
+            "general purpose": ["N2", "N4", "E2", "N2D"],
+            "accelerator optimized": ["G2"]
+        }
+        if machine_family in valid_families_series and series in valid_families_series[machine_family]:
+            print("Valid family and series going ahead for vcpu and memory")
+        
+            vcpu_and_memory()
+                    
+        boot_disk_type()
+        boot_disk_size()
+        sustained_user_discounts()
+        region()
+        with_sud_princing()
+        time.sleep(3)
+        with_sud_pricing=driver.current_url
+        
+        one_year_commitment()
+        time.sleep(3)
+        one_year_pricing=driver.current_url
+        
+        three_year_commitment()
+        time.sleep(3)
+        three_year_pricing=driver.current_url
+        
 
-        time.sleep(15)
+
+        
         #cost_element = driver.find_element(By.CSS_SELECTOR, "span.MyvX5d.D0aEmf")
         #cost = cost_element.text
         # Using aria-label
-        wait = WebDriverWait(driver, 10)  # Timeout of 10 seconds
+        # Timeout of 10 seconds
 
-        download_button = wait.until(EC.visibility_of_element_located((By.XPATH, "//*[contains(@aria-label, 'Download estimate as .csv')]")))
-        download_button.click()
-        downloaded_files = glob.glob(f"{download_directory}/*.csv")
+        #download_button = wait.until(EC.visibility_of_element_located((By.XPATH, "//*[contains(@aria-label, 'Download estimate as .csv')]")))
+        #download_button.click()
+        """downloaded_files = glob.glob(f"{download_directory}/*.csv")
         if not downloaded_files:
             return "Error", "Error"
         latest_file = max(downloaded_files, key=os.path.getctime)
 
         total_price = extract_total_price(latest_file)
         print(f"Total Price: {total_price}")
-        os.remove(latest_file)
+        os.remove(latest_file)"""
 
-        # Get the current URL
+        '''time.sleep(15)
         current_url = driver.current_url
+        print(current_url)'''
+        
+        
+        label = WebDriverWait(driver, 10).until(
+        EC.visibility_of_element_located((By.CSS_SELECTOR, "label.gt0C8e.MyvX5d.D0aEmf"))
+            )
+    
+    # Extract the text content
+        extracted_text = label.text
+        print(f"Extracted Text: {extracted_text}")
+        
+        tooltip_element = WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable((By.ID, "tt-c6968"))  # Using ID for precision
+    )
+    # Click the element
+        tooltip_element.click()
+        print(with_sud_pricing)
+        print(one_year_pricing)
+        print(three_year_pricing)
 
-        return total_price, current_url
+        return  with_sud_pricing,one_year_pricing,three_year_pricing
     
     
     
@@ -235,11 +361,12 @@ def main():
             os_name = os_options[0]
         no_of_instances = int(row["No. of Instances"])
         machine_family = row["Machine Family"] if pd.notna(row["Machine Family"]) else "general purpose"
-        print(f"Processing row {index + 1} with OS: {os_name}, Instances: {no_of_instances},machine family: {machine_family}")
+        series = row["Series"].upper() if pd.notna(row["Series"]) else "default"
+        print(f"Processing row {index + 1} with OS: {os_name}, Instances: {no_of_instances},machine family: {machine_family}, series {series}")
 
         try:
-            cost, url = process_row(driver, actions, os_name, no_of_instances, machine_family)
-            results.append({"OS with version": os_name, "No. of Instances": no_of_instances, "Machine Family": machine_family, "Estimated Cost": cost, "URL": url})
+            with_sud_pricing,one_year_pricing,three_year_pricing= process_row(driver, actions, os_name, no_of_instances, machine_family,series)
+            results.append({"OS with version": os_name, "No. of Instances": no_of_instances, "Machine Family": machine_family,  "URL": with_sud_pricing+' '+one_year_pricing+' '+three_year_pricing})
         except Exception as e:
             print(f"Error processing row {index + 1}: {e}")
             results.append({"OS with version": os_name, "No. of Instances": no_of_instances, "Machine Family": machine_family, "Estimated Cost": "Error", "URL": "Error"})
