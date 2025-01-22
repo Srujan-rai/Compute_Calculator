@@ -14,312 +14,6 @@ import csv
 import glob
 
 
-index_mapping = {
-    "General Purpose": {
-        "index": 0,  # Machine family index
-        "series": {
-            "N1": {
-                "index": 0,
-                "machine_types": {
-                    "Custom machine type": 0,
-                    "f1-micro": 1,
-                    "g1-small": 2,
-                    "n1-standard-1": 3,
-                    "n1-standard-2": 4,
-                    "n1-standard-4": 5,
-                    "n1-standard-8": 6,
-                    "n1-standard-16": 7,
-                    "n1-standard-32": 8,
-                    "n1-standard-64": 9,
-                    "n1-standard-96": 10,
-                    "n1-highmem-2": 11,
-                    "n1-highmem-4": 12,
-                    "n1-highmem-8": 13,
-                    "n1-highmem-16": 14,
-                    "n1-highmem-32": 15,
-                    "n1-highmem-64": 16,
-                    "n1-highmem-96": 17,
-                    "n1-highcpu-2": 18,
-                    "n1-highcpu-4": 19,
-                    "n1-highcpu-8": 20,
-                    "n1-highcpu-16": 21,
-                    "n1-highcpu-32": 22,
-                    "n1-highcpu-64": 23,
-                    "n1-highcpu-96": 24,
-                },
-            },
-            "N2": {
-                "index": 1,
-                "machine_types": {
-                    "Custom machine type": 0,
-                    "n2-standard-2": 1,
-                    "n2-standard-4": 2,
-                    "n2-standard-8": 3,
-                    "n2-standard-16": 4,
-                    "n2-standard-32": 5,
-                    "n2-standard-48": 6,
-                    "n2-standard-64": 7,
-                    "n2-standard-80": 8,
-                    "n2-standard-96": 9,
-                    "n2-standard-128": 10,
-                    "n2-highmem-2": 11,
-                    "n2-highmem-4": 12,
-                    "n2-highmem-8": 13,
-                    "n2-highmem-16": 14,
-                    "n2-highmem-32": 15,
-                    "n2-highmem-48": 16,
-                    "n2-highmem-64": 17,
-                    "n2-highmem-80": 18,
-                    "n2-highmem-96": 19,
-                    "n2-highmem-128": 20,
-                    "n2-highcpu-2": 21,
-                    "n2-highcpu-4": 22,
-                    "n2-highcpu-8": 23,
-                    "n2-highcpu-16": 24,
-                    "n2-highcpu-32": 25,
-                    "n2-highcpu-48": 26,
-                    "n2-highcpu-64": 27,
-                    "n2-highcpu-80": 28,
-                    "n2-highcpu-96": 29,
-                },
-            },
-            "N4": {
-                "index": 2,
-                "machine_types": {
-                    "Custom machine type": 0,
-                    "n4-standard-2": 1,
-                    "n4-standard-4": 2,
-                    "n4-standard-8": 3,
-                    "n4-standard-16": 4,
-                    "n4-standard-32": 5,
-                    "n4-standard-48": 6,
-                    "n4-standard-64": 7,
-                    "n4-standard-80": 8,
-                    "n4-highmem-2": 9,
-                    "n4-highmem-4": 10,
-                    "n4-highmem-8": 11,
-                    "n4-highmem-16": 12,
-                    "n4-highmem-32": 13,
-                    "n4-highmem-48": 14,
-                    "n4-highmem-64": 15,
-                    "n4-highmem-80": 16,
-                    "n4-highcpu-2": 17,
-                    "n4-highcpu-4": 18,
-                    "n4-highcpu-8": 19,
-                    "n4-highcpu-16": 20,
-                    "n4-highcpu-32": 21,
-                    "n4-highcpu-48": 22,
-                    "n4-highcpu-64": 23,
-                    "n4-highcpu-80": 24,
-                },
-            },
-            "E2": {
-                "index": 3,
-                "machine_types": {
-                    "Custom machine type": 0,
-                    "e2-micro": 1,
-                    "e2-small": 2,
-                    "e2-medium": 3,
-                    "e2-standard-2": 4,
-                    "e2-standard-4": 5,
-                    "e2-standard-8": 6,
-                    "e2-standard-16": 7,
-                    "e2-standard-32": 8,
-                    "e2-highmem-2": 9,
-                    "e2-highmem-4": 10,
-                    "e2-highmem-8": 11,
-                    "e2-highmem-16": 12,
-                    "e2-highcpu-2": 13,
-                    "e2-highcpu-4": 14,
-                    "e2-highcpu-8": 15,
-                    "e2-highcpu-16": 16,
-                    "e2-highcpu-32": 17,
-                },
-            },
-            "N2D": {
-                "index": 4,
-                "machine_types": {
-                    "Custom machine type": 0,
-                    "n2d-standard-2": 1,
-                    "n2d-standard-4": 2,
-                    "n2d-standard-8": 3,
-                    "n2d-standard-16": 4,
-                    "n2d-standard-32": 5,
-                    "n2d-standard-48": 6,
-                    "n2d-standard-64": 7,
-                    "n2d-standard-80": 8,
-                    "n2d-standard-96": 9,
-                    "n2d-standard-128": 10,
-                    "n2d-standard-224": 11,
-                    "n2d-highmem-2": 12,
-                    "n2d-highmem-4": 13,
-                    "n2d-highmem-8": 14,
-                    "n2d-highmem-16": 15,
-                    "n2d-highmem-32": 16,
-                    "n2d-highmem-48": 17,
-                    "n2d-highmem-64": 18,
-                    "n2d-highmem-80": 19,
-                    "n2d-highmem-96": 20,
-                    "n2d-highcpu-2": 21,
-                    "n2d-highcpu-4": 22,
-                    "n2d-highcpu-8": 23,
-                    "n2d-highcpu-16": 24,
-                    "n2d-highcpu-32": 25,
-                    "n2d-highcpu-48": 26,
-                    "n2d-highcpu-64": 27,
-                    "n2d-highcpu-80": 28,
-                    "n2d-highcpu-96": 29,
-                    "n2d-highcpu-128": 30,
-                    "n2d-highcpu-224": 31,
-                },
-            },
-        },
-    },
-    "Compute-Optimized": {
-        "index": 1,
-        "series": {
-            "C2": {
-                "index": 0,
-                "machine_types": {
-                    "c2-standard-4": 0,
-                    "c2-standard-8": 1,
-                    "c2-standard-16": 2,
-                    "c2-standard-30": 3,
-                    "c2-standard-60": 4,
-                },
-            },
-            "C2D": {
-                "index": 1,
-                "machine_types": {
-                    "c2d-standard-2": 0,
-                    "c2d-standard-4": 1,
-                    "c2d-standard-8": 2,
-                    "c2d-standard-16": 3,
-                    "c2d-standard-32": 4,
-                    "c2d-standard-56": 5,
-                    "c2d-standard-112": 6,
-                    "c2d-highmem-2": 7,
-                    "c2d-highmem-4": 8,
-                    "c2d-highmem-8": 9,
-                    "c2d-highmem-16": 10,
-                    "c2d-highmem-32": 11,
-                    "c2d-highmem-56": 12,
-                    "c2d-highmem-112": 13,
-                    "c2d-highcpu-2": 14,
-                    "c2d-highcpu-4": 15,
-                    "c2d-highcpu-8": 16,
-                    "c2d-highcpu-16": 17,
-                    "c2d-highcpu-32": 18,
-                    "c2d-highcpu-56": 19,
-                    "c2d-highcpu-112": 20,
-                },
-            },
-            "H3": {
-                "index": 2,
-                "machine_types": {
-                    "h3-standard-88": 0,
-                },
-            },
-        },
-    },
-
-    # Memory-Optimized
-    "Memory-Optimized": {
-        "index": 2,
-        "series": {
-            "M1": {
-                "index": 0,
-                "machine_types": {
-                    "m1-megamem-96": 0,
-                    "m1-ultramem-40": 1,
-                    "m1-ultramem-80": 2,
-                    "m1-ultramem-160": 3,
-                },
-            },
-            "M2": {
-                "index": 1,
-                "machine_types": {
-                    "m2-megamem-416": 0,
-                    "m2-ultramem-208": 1,
-                    "m2-ultramem-416": 2,
-                    "m2-hypermem-416": 3,
-                },
-            },
-            "M3": {
-                "index": 2,
-                "machine_types": {
-                    "m3-megamem-64": 0,
-                    "m3-megamem-128": 1,
-                    "m3-ultramem-32": 2,
-                    "m3-ultramem-64": 3,
-                    "m3-ultramem-128": 4,
-                },
-            },
-        },
-    },
-
-    # Accelerator-Optimized
-    "Accelerator-Optimized": {
-        "index": 3,
-        "series": {
-            "A2": {
-                "index": 0,
-                "machine_types": {
-                    "a2-highgpu-1g": 0,
-                    "a2-highgpu-2g": 1,
-                    "a2-highgpu-4g": 2,
-                    "a2-highgpu-8g": 3,
-                    "a2-megagpu-16g": 4,
-                    "a2-ultragpu-1g": 5,
-                    "a2-ultragpu-2g": 6,
-                    "a2-ultragpu-4g": 7,
-                    "a2-ultragpu-8g": 8,
-                },
-            },
-            "A3": {
-                "index": 1,
-                "machine_types": {
-                    "a3-highgpu-1g": 0,
-                    "a3-highgpu-2g": 1,
-                    "a3-highgpu-4g": 2,
-                    "a3-highgpu-8g": 3,
-                },
-            },
-            "G2": {
-                "index": 2,
-                "machine_types": {
-                    "Custom machine type": 0,
-                    "g2-standard-4": 1,
-                    "g2-standard-8": 2,
-                    "g2-standard-12": 3,
-                    "g2-standard-16": 4,
-                    "g2-standard-24": 5,
-                    "g2-standard-32": 6,
-                    "g2-standard-48": 7,
-                    "g2-standard-96": 8,
-                },
-            },
-        },
-    },
-
-    # Storage-Optimized
-    "Storage-Optimized": {
-        "index": 4,
-        "series": {
-            "Z3": {
-                "index": 0,
-                "machine_types": {
-                    "z3-highmem-88": 0,
-                    "z3-highmem-176": 1,
-                },
-            },
-        },
-    },
-    
-}
-
-
-
 
 # File paths
 input_file = "sheet.csv"  # Input CSV file
@@ -398,12 +92,10 @@ def extract_total_price(file_path):
  
 
 
-def process_row(driver, actions, os_name, no_of_instances,machine_family,series):
+def process_row(driver, actions, os_name, no_of_instances,machine_family,series,machine_type,vCPU,ram,Boot_disk_capacity,region):
     """Processes a single row to calculate cost and retrieve URL."""
     os_index = get_os_index(os_name)
-    machine_family_index = 0#0get_machine_family_index(machine_family) 
-    series_index=1
-    machine_type_index=1
+    
     disk_type=1
     size=200
     region_index=5
@@ -456,9 +148,8 @@ def process_row(driver, actions, os_name, no_of_instances,machine_family,series)
             time.sleep(0.2)
         actions.send_keys(Keys.ENTER).perform()
         print("navigated to machine family")
-        for _ in range(machine_family_index):  # Select the machine family (customize index if needed)
-            actions.send_keys(Keys.ARROW_DOWN).perform()
-            time.sleep(0.2)
+        actions.send_keys(machine_family).perform()  # Select the machine family (customize index if needed)
+        time.sleep(0.2)
         actions.send_keys(Keys.ENTER).perform()
         print("machine family selected")
 
@@ -467,21 +158,21 @@ def process_row(driver, actions, os_name, no_of_instances,machine_family,series)
         print("navigating to series")
         actions.send_keys(Keys.TAB).perform() 
         actions.send_keys(Keys.ENTER).perform()# Navigate to the series dropdown
-        for _ in range(series_index):  # Select the series (customize index if needed)
-            actions.send_keys(Keys.ARROW_DOWN).perform()
-            time.sleep(0.2)
+          # Select the series (customize index if needed)
+        actions.send_keys(series).perform()
+        time.sleep(0.2)
         actions.send_keys(Keys.ENTER).perform()
         time.sleep(0.2)
         print("series selected")
 
-    def machine_type():
+    def machine_type_selection():
         """Selects the machine type."""
         actions.send_keys(Keys.TAB).perform()  
         # Navigate to the machine type dropdown
         actions.send_keys(Keys.ENTER).perform()
-        for _ in range(machine_type_index):  # Select the machine type (customize index if needed)
-            actions.send_keys(Keys.ARROW_DOWN).perform()
-            time.sleep(0.2)
+          # Select the machine type (customize index if needed)
+        actions.send_keys(machine_type).perform()
+        time.sleep(0.2)
         actions.send_keys(Keys.ENTER).perform()
         print("machine type selected")
 
@@ -494,7 +185,7 @@ def process_row(driver, actions, os_name, no_of_instances,machine_family,series)
         
         
         actions.send_keys(Keys.ENTER).perform()
-        actions.send_keys(vcpu_value).perform()# Enter the vCPU value
+        actions.send_keys(vCPU).perform()# Enter the vCPU value
         print("vcpu selected")
 
         print("navigating for memory ")
@@ -503,14 +194,18 @@ def process_row(driver, actions, os_name, no_of_instances,machine_family,series)
             time.sleep(0.2)
     
         actions.send_keys(Keys.ENTER).perform()
-        actions.send_keys(memory_value).perform() # Enter the memory value
+        actions.send_keys(ram).perform() # Enter the memory value
         print("memory selected")
-        
-        for _ in range(4): #TILL BOOT TYPE SECELCTOR WE DO THE PROGRESSION ALONG WITH EXTENDED MEMEORY ICON THAT TAKES 2 TABS
+        time.sleep(2)        
+        for _ in range(1): #TILL BOOT TYPE SECELCTOR WE DO THE PROGRESSION ALONG WITH EXTENDED MEMEORY ICON THAT TAKES 2 TABS
             actions.send_keys(Keys.TAB).perform()
-            time.sleep(0.2)
+            time.sleep(5)
             
        
+    def extension_memory_escape():
+        print("extension activated")
+        actions.send_keys(Keys.TAB).perform()
+        actions.send_keys(Keys.TAB).perform()
         
     
     
@@ -525,7 +220,7 @@ def process_row(driver, actions, os_name, no_of_instances,machine_family,series)
         for _ in range(3):
             actions.send_keys(Keys.TAB).perform()
             time.sleep(0.2)
-        actions.send_keys(size).perform()
+        actions.send_keys(Boot_disk_capacity).perform()
         
     def sustained_user_discounts():
         for _ in range(2):
@@ -533,14 +228,14 @@ def process_row(driver, actions, os_name, no_of_instances,machine_family,series)
             time.sleep(0.2)
         actions.send_keys(Keys.ENTER).perform()
  
-    def region():
+    def region_selection():
         for _ in range(6): #iterate towards the region
             actions.send_keys(Keys.TAB).perform()
             time.sleep(0.2)
         actions.send_keys(Keys.ENTER).perform() #open the dropdown
-        for _ in range(region_index):
-            actions.send_keys(Keys.ARROW_DOWN).perform()
-            time.sleep(0.2)
+        
+        actions.send_keys(region).perform()
+        time.sleep(0.2)
         actions.send_keys(Keys.ENTER).perform()
     
     def with_sud_princing():
@@ -578,7 +273,7 @@ def process_row(driver, actions, os_name, no_of_instances,machine_family,series)
         select_operating_system()
         select_machine_family()
         select_series()
-        machine_type()
+        machine_type_selection()
         valid_families_series = {
             "general purpose": ["N2", "N4", "E2", "N2D"],
             "accelerator optimized": ["G2"]
@@ -587,21 +282,47 @@ def process_row(driver, actions, os_name, no_of_instances,machine_family,series)
             print("Valid family and series going ahead for vcpu and memory")
         
             vcpu_and_memory()
-                    
+            
+            '''if series=="N2" or series=="N2D" or series=="N4" :
+                extension_memory_escape()'''
+        
+        
+        
         boot_disk_type()
         boot_disk_size()
         sustained_user_discounts()
-        region()
+        region_selection()
         with_sud_princing()
         time.sleep(3)
+        label = WebDriverWait(driver, 10).until(
+        EC.visibility_of_element_located((By.CSS_SELECTOR, "label.gt0C8e.MyvX5d.D0aEmf"))
+            )
+    
+    # Extract the text content
+        extracted_text = label.text
+        print(f"sud pricing: {extracted_text}")
         with_sud_pricing=driver.current_url
         
         one_year_commitment()
         time.sleep(3)
+        label = WebDriverWait(driver, 10).until(
+        EC.visibility_of_element_located((By.CSS_SELECTOR, "label.gt0C8e.MyvX5d.D0aEmf"))
+            )
+    
+    # Extract the text content
+        extracted_text = label.text
+        print(f"one year pricing: {extracted_text}")
         one_year_pricing=driver.current_url
         
         three_year_commitment()
         time.sleep(3)
+        label = WebDriverWait(driver, 10).until(
+        EC.visibility_of_element_located((By.CSS_SELECTOR, "label.gt0C8e.MyvX5d.D0aEmf"))
+            )
+    
+    # Extract the text content
+        extracted_text = label.text
+        print(f"three year pricing: {extracted_text}")
         three_year_pricing=driver.current_url
         
 
@@ -632,20 +353,18 @@ def process_row(driver, actions, os_name, no_of_instances,machine_family,series)
         EC.visibility_of_element_located((By.CSS_SELECTOR, "label.gt0C8e.MyvX5d.D0aEmf"))
             )
     
-    # Extract the text content
-        extracted_text = label.text
-        print(f"Extracted Text: {extracted_text}")
+   
         
-        tooltip_element = WebDriverWait(driver, 10).until(
+        '''tooltip_element = WebDriverWait(driver, 10).until(
         EC.element_to_be_clickable((By.ID, "tt-c6968"))  # Using ID for precision
-    )
-    # Click the element
-        tooltip_element.click()
+        )
+        # Click the element
+        tooltip_element.click()'''
         print(with_sud_pricing)
         print(one_year_pricing)
         print(three_year_pricing)
 
-        return  with_sud_pricing,one_year_pricing,three_year_pricing
+        return  with_sud_pricing or 'error fetching the report',one_year_pricing or 'error fetching the report',three_year_pricing or 'error fetching the report'
     
     
     
@@ -665,15 +384,23 @@ def main():
     for index, row in sheet.iterrows():
         os_name = row["OS with version"]
         if pd.isna(os_name) or os_name.strip() == "":
-            os_name = os_options[0]
+          os_name = os_options[0]
+          
+          
         no_of_instances = int(row["No. of Instances"])
         machine_family = row["Machine Family"] if pd.notna(row["Machine Family"]) else "general purpose"
-        series = row["Series"].upper() if pd.notna(row["Series"]) else "default"
-        print(f"Processing row {index + 1} with OS: {os_name}, Instances: {no_of_instances},machine family: {machine_family}, series {series}")
+        series = row["Series"].upper() if pd.notna(row["Series"]) else "E2"
+        machine_type = row["Machine Type"].upper() if pd.notna(row["Machine Type"]) else "custom"
+        vCPU = row["vCPUs"] if pd.notna(row["vCPUs"]) else 2
+        ram = row["RAM"] if pd.notna(row["RAM"]) else 2
+        Boot_disk_capacity= row["BootDisk Capacity"] if pd.notna(row["BootDisk Capacity"]) else 10
+        region= row["Datacenter Location"] if pd.notna(row["Datacenter Location"]) else "Mumbai" 
+        
+        print(f"Processing row {index + 1} with OS: {os_name}, Instances: {no_of_instances},machine family: {machine_family}, series {series},machine type:{machine_type}")
 
         try:
-            with_sud_pricing,one_year_pricing,three_year_pricing= process_row(driver, actions, os_name, no_of_instances, machine_family,series)
-            results.append({"OS with version": os_name, "No. of Instances": no_of_instances, "Machine Family": machine_family,  "URL": with_sud_pricing+' '+one_year_pricing+' '+three_year_pricing})
+            with_sud_pricing,one_year_pricing,three_year_pricing= process_row(driver, actions, os_name, no_of_instances, machine_family,series,machine_type,vCPU,ram,Boot_disk_capacity,region)
+            results.append({"OS with version": os_name, "No. of Instances": no_of_instances, "Machine Family": machine_family,  "with sud pricing": with_sud_pricing, "one_year_pricing":one_year_pricing, "three_year_pricing":three_year_pricing})
         except Exception as e:
             print(f"Error processing row {index + 1}: {e}")
             results.append({"OS with version": os_name, "No. of Instances": no_of_instances, "Machine Family": machine_family, "Estimated Cost": "Error", "URL": "Error"})
