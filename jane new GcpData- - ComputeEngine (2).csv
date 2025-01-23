@@ -1,0 +1,5 @@
+Srno,No. of Instances,OS with version,Machine Class,Machine Family,Series,Machine Type,vCPUs,RAM,BootDisk Capacity,Gpu no,Gpu Type,WorkStation,Datacenter Location,Avg no. of hrs,Hrs/Min,Days/Month,Zonal/Regional,HDD,SSD,Balanced SSD,Snapshot
+1,1.0,free,,,e2,micro,,,,,,,,asia-south1,,,,,,,
+2,1.0,free,,,n1,custom,1,3.75,,,,,,asia-south1,625,hours,month,,,,
+3,1.0,free,,,n2d,,4,36,,,,,,asia-south1,94,hours,month,,,,
+4,1.0,free,,,n2d,HIGHMEM,4,32,,,,,,asia-south1,432,hours,month,,,,

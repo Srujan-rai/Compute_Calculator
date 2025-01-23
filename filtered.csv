@@ -1,0 +1,2 @@
+SrNo,No. of Instances,OS with version,Machine Class,Machine Family,Series,Machine Type,vCPUs,RAM,BootDisk Capacity,Gpu no,Gpu Type,WorkStation,Datacenter Location,Avg no. of hrs,Hrs/Min,Days/Month,Zonal/Regional,HDD,SSD,Balanced SSD,Snapshot
+1,1.0,free,,General Purpose,e2,e2-micro,1,1,10,0,None,None,asia-south1 (Mumbai),720,hours,month,Regional,0,10,0,No Snapshot

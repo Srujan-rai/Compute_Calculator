@@ -1,12 +1,12 @@
-index={
-    "General Purpose":1,
-    "Compute-optimized":2,
-    Memory-optimized":3,
-    "Accelerator-optimized":4,
-    "Storage-optimized":5,
-    "N1":1
-    "N2":2
-    "N4":3
+{
+    "general purpose":1,
+    "compute-optimized":2,
+    "memory-optimized":3,
+    "accelerator-optimized":4,
+    "storage-optimized":5,
+    "N1":1,
+    "N2":2,
+    "N4":3,
     "E2":4,
     "N2D":5,
     "T2A":6,
@@ -85,7 +85,7 @@ index={
 "n4-highmem-64":15,
 "n4-highmem-80":16,
 "n4-highcpu-2":17,
-"n4-highcpu-4"18,
+"n4-highcpu-4":18,
 "n4-highcpu-8":19,
 "n4-highcpu-16":20,
 "n4-highcpu-32":21,
@@ -240,7 +240,7 @@ index={
 "c4a-standard-16":5,
 "c4a-standard-32":6,
 "c4a-standard-48":7,
-"c4a-standard-64:8,
+"c4a-standard-64":8,
 "c4a-standard-72":9,
 "c4a-highmem-1":10,
 "c4a-highmem-2":11,

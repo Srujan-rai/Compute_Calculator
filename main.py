@@ -90,9 +90,39 @@ def extract_total_price(file_path):
         print(f"Error reading the CSV file: {e}")
         return None
  
+def click_info_icon(driver,actions):
+    """Clicks on the <span> element accurately, handling obstructions."""
+    try:
+        # Wait for the presence of the element
+        wait = WebDriverWait(driver, 10)
+        info_icon = wait.until(
+            EC.presence_of_element_located((
+                By.XPATH, "//span[@jsname='S5tZuc' and contains(@class, 'pYTkkf-Bz112c-kBDsod-Rtc0Jf')]"
+            ))
+        )
+
+        # Scroll the element into view
+        driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", info_icon)
+
+        # Attempt to click the element
+        try:
+            info_icon.click()
+            print("Info icon clicked successfully.")
+        except Exception as e:
+            # If click fails, use JavaScript to trigger the click
+            print("Regular click failed, using JavaScript to click.")
+            driver.execute_script("arguments[0].click();", info_icon)
+            print("Info icon clicked successfully using JavaScript.")
+            actions.send_keys(Keys.TAB).perform()
+
+        return True
+    except Exception as e:
+        # Log the error and return False
+        print(f"Error clicking the info icon: {e}")
+        return False
 
 
-def process_row(driver, actions, os_name, no_of_instances,machine_family,series,machine_type,vCPU,ram,Boot_disk_capacity,region):
+def process_row( os_name, no_of_instances,machine_family,series,machine_type,vCPU,ram,Boot_disk_capacity,region):
     """Processes a single row to calculate cost and retrieve URL."""
     os_index = get_os_index(os_name)
     
@@ -101,7 +131,22 @@ def process_row(driver, actions, os_name, no_of_instances,machine_family,series,
     region_index=5
     vcpu_value=8
     memory_value=8
+    
+    download_directory = os.path.join(os.getcwd(), "downloads")
+    os.makedirs(download_directory, exist_ok=True)
+    chrome_options = webdriver.ChromeOptions()
+    prefs = {
+        "download.default_directory": download_directory,
+        "download.prompt_for_download": False,
+        "safebrowsing.enabled": True,
+    }
+    chrome_options.add_experimental_option("prefs", prefs)
+    driver = webdriver.Chrome(options=chrome_options)
+    driver.maximize_window()
 
+    actions = ActionChains(driver)
+    driver.get("https://cloud.google.com/products/calculator")
+    driver.implicitly_wait(10)
     def home_page():
         """Navigates to the pricing section."""
         driver.implicitly_wait(5)
@@ -196,6 +241,7 @@ def process_row(driver, actions, os_name, no_of_instances,machine_family,series,
         actions.send_keys(Keys.ENTER).perform()
         actions.send_keys(ram).perform() # Enter the memory value
         print("memory selected")
+        
         time.sleep(2)        
         for _ in range(1): #TILL BOOT TYPE SECELCTOR WE DO THE PROGRESSION ALONG WITH EXTENDED MEMEORY ICON THAT TAKES 2 TABS
             actions.send_keys(Keys.TAB).perform()
@@ -275,7 +321,7 @@ def process_row(driver, actions, os_name, no_of_instances,machine_family,series,
         select_series()
         machine_type_selection()
         valid_families_series = {
-            "general purpose": ["N2", "N4", "E2", "N2D"],
+            "general purpose": ["N1","N2", "N4", "N2D"],
             "accelerator optimized": ["G2"]
         }
         if machine_family in valid_families_series and series in valid_families_series[machine_family]:
@@ -293,36 +339,35 @@ def process_row(driver, actions, os_name, no_of_instances,machine_family,series,
         sustained_user_discounts()
         region_selection()
         with_sud_princing()
-        time.sleep(3)
+        time.sleep(5)
         label = WebDriverWait(driver, 10).until(
         EC.visibility_of_element_located((By.CSS_SELECTOR, "label.gt0C8e.MyvX5d.D0aEmf"))
             )
     
     # Extract the text content
-        extracted_text = label.text
-        print(f"sud pricing: {extracted_text}")
+        sud_pricing = label.text
+        print(f"sud pricing: {sud_pricing}")
         with_sud_pricing=driver.current_url
         
         one_year_commitment()
-        time.sleep(3)
+        time.sleep(5)
         label = WebDriverWait(driver, 10).until(
         EC.visibility_of_element_located((By.CSS_SELECTOR, "label.gt0C8e.MyvX5d.D0aEmf"))
             )
     
     # Extract the text content
-        extracted_text = label.text
-        print(f"one year pricing: {extracted_text}")
+        one_year = label.text
+        print(f"one year pricing: {one_year}")
         one_year_pricing=driver.current_url
         
         three_year_commitment()
-        time.sleep(3)
+        time.sleep(5)
         label = WebDriverWait(driver, 10).until(
         EC.visibility_of_element_located((By.CSS_SELECTOR, "label.gt0C8e.MyvX5d.D0aEmf"))
             )
     
-    # Extract the text content
-        extracted_text = label.text
-        print(f"three year pricing: {extracted_text}")
+        three_year = label.text
+        print(f"three year pricing: {three_year}")
         three_year_pricing=driver.current_url
         
 
@@ -364,22 +409,23 @@ def process_row(driver, actions, os_name, no_of_instances,machine_family,series,
         print(one_year_pricing)
         print(three_year_pricing)
 
-        return  with_sud_pricing or 'error fetching the report',one_year_pricing or 'error fetching the report',three_year_pricing or 'error fetching the report'
+        return  with_sud_pricing or 'error fetching the report',one_year_pricing or 'error fetching the report',three_year_pricing or 'error fetching the report',sud_pricing or 'error fetching the report',one_year or 'error fetching the report',three_year or 'error fetching the report'
     
     
     
     except Exception as e:
         print(f"Error processing: {e}")
         return "Error", "Error"
-    
+    finally:
+        driver.quit()
 
 def main():
     sheet = pd.read_csv(input_file)
     results = []
 
     
-    driver.get("https://cloud.google.com/products/calculator")
-    actions = ActionChains(driver)
+    '''driver.get("https://cloud.google.com/products/calculator")
+    actions = ActionChains(driver)'''
 
     for index, row in sheet.iterrows():
         os_name = row["OS with version"]
@@ -399,8 +445,8 @@ def main():
         print(f"Processing row {index + 1} with OS: {os_name}, Instances: {no_of_instances},machine family: {machine_family}, series {series},machine type:{machine_type}")
 
         try:
-            with_sud_pricing,one_year_pricing,three_year_pricing= process_row(driver, actions, os_name, no_of_instances, machine_family,series,machine_type,vCPU,ram,Boot_disk_capacity,region)
-            results.append({"OS with version": os_name, "No. of Instances": no_of_instances, "Machine Family": machine_family,  "with sud pricing": with_sud_pricing, "one_year_pricing":one_year_pricing, "three_year_pricing":three_year_pricing})
+            with_sud_pricing_url,one_year_pricing_url,three_year_pricing_url,sud_pricing,one_year_pricing,three_year_pricing= process_row( os_name, no_of_instances, machine_family,series,machine_type,vCPU,ram,Boot_disk_capacity,region)
+            results.append({"OS with version": os_name, "No. of Instances": no_of_instances, "Machine Family": machine_family,  "with sud pricing_url": with_sud_pricing_url, "one_year_pricing_url":one_year_pricing_url, "three_year_pricing_url":three_year_pricing_url, "sud_pricing":sud_pricing, "one_year_pricing":one_year_pricing, "three_year_pricing":three_year_pricing})
         except Exception as e:
             print(f"Error processing row {index + 1}: {e}")
             results.append({"OS with version": os_name, "No. of Instances": no_of_instances, "Machine Family": machine_family, "Estimated Cost": "Error", "URL": "Error"})
