@@ -1,2 +1,5 @@
 SrNo,No. of Instances,OS with version,Machine Class,Machine Family,Series,Machine Type,vCPUs,RAM,BootDisk Capacity,Gpu no,Gpu Type,WorkStation,Datacenter Location,Avg no. of hrs,Hrs/Min,Days/Month,Zonal/Regional,HDD,SSD,Balanced SSD,Snapshot
-1,1.0,free,,General Purpose,e2,e2-micro,1,1,10,0,None,None,asia-south1 (Mumbai),720,hours,month,Regional,0,10,0,No Snapshot
+1,1.0,free,,General Purpose,e2,e2-micro,0.25,1,10,0,None,None,asia-south1,720,hours,month,Regional,0,10,0,No Snapshot
+2,2.0,ubuntu,,General Purpose,n1,n1-standard-1,1,3.75,50,0,None,None,us-central1,730,hours,month,Zonal,10,50,0,Snapshot
+3,3.0,win,,Accelerator Optimized,g2,g2-standard-4,2,15,100,1,None,None,europe-west1,600,hours,month,Zonal,0,100,0,No Snapshot
+4,1.0,rhel,,Compute Optimized,c2,c2-standard-4,4,8,20,0,None,None,asia-east1,500,hours,month,Regional,20,0,0,Snapshot

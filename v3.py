@@ -8,6 +8,9 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support import expected_conditions as EC
 from selenium import webdriver
 from selenium.common.exceptions import JavascriptException
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException, NoSuchElementException, ElementClickInterceptedException
+import pyautogui
 import time
 import os
 import pandas as pd
@@ -109,23 +112,23 @@ def handle_os(driver,actions,os_index):
     #time.sleep(5)
     for _ in range(os_index):
         actions.send_keys(Keys.ARROW_DOWN).perform()
-        time.sleep(0.2)
+        time.sleep(1)
     actions.send_keys(Keys.ENTER).perform()
     for _ in range(6):
         actions.send_keys(Keys.TAB).perform()
-        time.sleep(0.2)
+        time.sleep(1)
     print("OS handled")
     
 def handle_machine_family(driver,actions,machine_family_index):
     actions.send_keys(Keys.ENTER).perform()
-    time.sleep(0.2)
+    time.sleep(1)
     for _ in range(machine_family_index-1):
         actions.send_keys(Keys.ARROW_DOWN).perform()  #SELECTION
-        time.sleep(0.2)
+        time.sleep(1)
     actions.send_keys(Keys.ENTER).perform()
-    time.sleep(0.2)
+    time.sleep(1)
     actions.send_keys(Keys.TAB).perform()
-    time.sleep(0.2)
+    time.sleep(1)
     print("Machine Family handled")
 
 
@@ -134,11 +137,11 @@ def handle_series(driver,actions,series_index):
     
     for _ in range(series_index):
         actions.send_keys(Keys.ARROW_DOWN).perform()   #SELECTION
-        time.sleep(0.2)
+        time.sleep(1)
     actions.send_keys(Keys.ENTER).perform()
-    time.sleep(0.2)
+    time.sleep(1)
     actions.send_keys(Keys.TAB).perform()
-    time.sleep(0.2)
+    time.sleep(1)
     print("Series handled")
 
 def handle_machine_type(driver,actions,machine_type,machine_type_index):
@@ -163,6 +166,7 @@ def handle_vcpu_and_memory(driver,actions,vCPU,ram):
         actions.send_keys(Keys.TAB).perform()
         time.sleep(0.2)
     time.sleep(2)
+    actions.send_keys(Keys.BACKSPACE).perform()
     actions.send_keys(vCPU).perform()
     time.sleep(2)
     actions.send_keys(Keys.ENTER).perform()
@@ -170,6 +174,8 @@ def handle_vcpu_and_memory(driver,actions,vCPU,ram):
         actions.send_keys(Keys.TAB).perform()
         time.sleep(0.2)
     time.sleep(2)
+    actions.send_keys(Keys.BACKSPACE).perform()
+
     actions.send_keys(ram).perform()
     time.sleep(2)
     actions.send_keys(Keys.ENTER).perform()
@@ -201,26 +207,38 @@ def boot_disk_capacitys(driver,actions,boot_disk_capacity):
     actions.send_keys(boot_disk_capacity).perform()
    
 
+def move_to_region(driver,actions,move):
+    for _ in range(move):
+        actions.send_keys(Keys.TAB).perform()
+        time.sleep(0.2)
+    print("Region reached")
+
+def select_region(driver, actions, region):
+    actions.send_keys(Keys.ENTER).perform()
+    time.sleep(1)
+    
+    pyautogui.hotkey('ctrl', 'f')
+    time.sleep(2)
+    
+    pyautogui.typewrite(region)
+    time.sleep(3)
+    
+    pyautogui.press('esc')
+    time.sleep(3)
+    
+    actions.send_keys(Keys.ENTER).perform()
+    print("Region selected")
+
 
 def get_price_with_js(driver):
-    """
-    Extracts the price value using JavaScript execution via Selenium.
     
-    Args:
-        driver: Selenium WebDriver instance.
-    
-    Returns:
-        str: Extracted price value or a fallback message if not found.
-    """
     try:
-        # JavaScript to get the inner text of the target element
         js_script = """
         const element = document.querySelector('span.MyvX5d.D0aEmf');
         return element ? element.textContent.trim() : null;
         """
         price_text = driver.execute_script(js_script)
         
-        # Validate the extracted text (basic validation for monetary value)
         if price_text and price_text.startswith("$"):
             return price_text
         elif price_text:
@@ -232,9 +250,59 @@ def get_price_with_js(driver):
         return f"An unexpected JavaScript error occurred: {str(e)}"
 
 
+def sud_toggle_on(driver,actions):
+    pyautogui.hotkey('ctrl', 'f')
+    time.sleep(2)
+    
+    pyautogui.typewrite('Add sustained use discounts')
+    time.sleep(3)
+    
+    pyautogui.press('esc')
+    time.sleep(3)
+    
+    actions.key_down(Keys.SHIFT).send_keys(Keys.TAB).key_up(Keys.SHIFT).perform()
+    time.sleep(1)
+    actions.send_keys(Keys.ENTER).perform()
+    print("Sud turned on")
+
+def one_year_selection(driver,actions):
+    pyautogui.hotkey('ctrl', 'f')
+    time.sleep(2)
+    
+    pyautogui.typewrite('Committed use discount options')
+    time.sleep(3)
+    
+    pyautogui.press('esc')
+    time.sleep(3)   
+    
+    for _ in range(2):
+        actions.send_keys(Keys.TAB).perform()
+        time.sleep(0.2)
+    actions.send_keys(Keys.ARROW_RIGHT).perform()
+    actions.send_keys(Keys.ENTER).perform()
 
 
- 
+
+
+def three_year_selection(driver,actions):
+    pyautogui.hotkey('ctrl', 'f')
+    time.sleep(2)
+    
+    pyautogui.typewrite('Committed use discount options')
+    time.sleep(3)
+    
+    pyautogui.press('esc')
+    time.sleep(2)   
+    
+    for _ in range(2):
+        actions.send_keys(Keys.TAB).perform()
+        time.sleep(0.2)
+    actions.send_keys(Keys.ARROW_RIGHT).perform()
+    time.sleep(0.2)
+    actions.send_keys(Keys.ARROW_RIGHT).perform()
+    actions.send_keys(Keys.ENTER).perform()
+  
+    
 
 #=============================================================================================#
 def get_on_demand_pricing( os_name, no_of_instances,hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region):
@@ -291,6 +359,51 @@ def get_on_demand_pricing( os_name, no_of_instances,hours_per_day, machine_famil
     
     boot_disk_capacitys(driver,actions,boot_disk_capacity)    
     
+    if series == "N1":
+        moves = 8
+        print(f"Series {series}: Assigned {moves} MOVES")
+        move_to_region(driver,actions,moves)
+
+    elif series in ["N2", "N2D"] and machine_type=="custom":
+        moves = 7
+        print(f"Series {series}: Assigned {moves} MOVES")
+        move_to_region(driver,actions,moves)
+    
+    elif series in ["N2", "N2D", "C2", "G2", "M1"]:
+        moves = 7
+        print(f"Series {series}: Assigned {moves} MOVES")
+        move_to_region(driver,actions,moves)
+
+    elif series == "Z3":
+        moves = 4
+        print(f"Series {series}: Assigned {moves} MOVES")
+        move_to_region(driver,actions,moves)
+
+    elif series in ["C3"] and machine_family=="custom":
+        moves = 5
+        print(f"Series {series}: Assigned {moves} MOVES")
+        move_to_region(driver,actions,moves)
+        
+    elif series in ["C3", "C2D", "A2", "A3", "M2", "M3"]:
+        moves = 5
+        print(f"Series {series}: Assigned {moves} MOVES")
+        move_to_region(driver,actions,moves)
+
+    elif series in ["N4", "E2", "T2A", "T2D", "C3D", "C4", "C4A", "H3"]:
+        moves = 3
+        print(f"Series {series}: Assigned {moves} MOVES")
+        move_to_region(driver,actions,moves)
+
+    else:
+        moves = 0 
+        print(f"Series {series}: No match found, assigned {moves} MOVES")
+
+    select_region(driver,actions,region)
+    
+        
+        
+    
+    time.sleep(5)
     
     current_url = driver.current_url
     
@@ -299,6 +412,8 @@ def get_on_demand_pricing( os_name, no_of_instances,hours_per_day, machine_famil
     print(price,current_url)
     
     driver.quit()
+    
+    return current_url, price
     
     
     
@@ -345,11 +460,21 @@ def get_sud_pricing( os_name, no_of_instances,hours_per_day, machine_family, ser
     else:
         print(f"Skipping handle_vcpu_and_memory: Machine Family: {machine_family}, Series: {series}, Type: {machine_type}")
     
+    boot_disk_type(driver,actions)
+    
+    boot_disk_capacitys(driver,actions,boot_disk_capacity) 
+    
+    sud_toggle_on(driver,actions)
+    
+    select_region(driver,actions,region)
     
     
+    
+    price=get_price_with_js(driver)
     current_url = driver.current_url
-
+    print(price,current_url)
     driver.quit()
+    return current_url, price
     
     
 def get_one_year_pricing(os_name, no_of_instances,hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region):
@@ -379,10 +504,33 @@ def get_one_year_pricing(os_name, no_of_instances,hours_per_day, machine_family,
     handle_series(driver,actions,series)
     handle_machine_type(driver,actions,machine_type)
     
+    if (machine_family.lower() == "general purpose" and series in ["N1", "N2", "N4", "E2", "N2D"] and not (series == "N1" and machine_type in ["f1-micro", "g1-small"])):
+            print(f"Calling handle_vcpu_and_memory Machine Family: {machine_family}, Series: {series}, Type: {machine_type}")
+            handle_vcpu_and_memory(driver, actions, vCPU, ram)
+            if machine_type=="custom":
+                handle_extension(driver,actions)
+        
+    elif machine_family.lower() == "accelerator optimized" and series == "G2":
+            print(f"Calling handle_vcpu_and_memory  Machine Family: {machine_family}, Series: {series}")
+            handle_vcpu_and_memory(driver, actions, vCPU, ram)
+            
+    else:
+        print(f"Skipping handle_vcpu_and_memory: Machine Family: {machine_family}, Series: {series}, Type: {machine_type}")
     
+    boot_disk_type(driver,actions)
+    
+    boot_disk_capacitys(driver,actions,boot_disk_capacity) 
+    
+    
+    one_year_selection(driver,actions)
+    
+    
+    
+    price=get_price_with_js(driver)
     current_url = driver.current_url
+    print(price,current_url)
     driver.quit()
-
+    return current_url, price
 
 def  get_three_year_pricing(os_name, no_of_instances,hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region):
     print("3 year pricing")
@@ -412,10 +560,33 @@ def  get_three_year_pricing(os_name, no_of_instances,hours_per_day, machine_fami
     handle_series(driver,actions,series)
     handle_machine_type(driver,actions,machine_type)
     
+    if (machine_family.lower() == "general purpose" and series in ["N1", "N2", "N4", "E2", "N2D"] and not (series == "N1" and machine_type in ["f1-micro", "g1-small"])):
+            print(f"Calling handle_vcpu_and_memory Machine Family: {machine_family}, Series: {series}, Type: {machine_type}")
+            handle_vcpu_and_memory(driver, actions, vCPU, ram)
+            if machine_type=="custom":
+                handle_extension(driver,actions)
+        
+    elif machine_family.lower() == "accelerator optimized" and series == "G2":
+            print(f"Calling handle_vcpu_and_memory  Machine Family: {machine_family}, Series: {series}")
+            handle_vcpu_and_memory(driver, actions, vCPU, ram)
+            
+    else:
+        print(f"Skipping handle_vcpu_and_memory: Machine Family: {machine_family}, Series: {series}, Type: {machine_type}")
+    
+    boot_disk_type(driver,actions)
+    
+    boot_disk_capacitys(driver,actions,boot_disk_capacity) 
     
     
+    
+    
+    
+    three_year_selection(driver,actions)
+    price=get_price_with_js(driver)
     current_url = driver.current_url
+    print(price,current_url)
     driver.quit()
+    return current_url, price
 
 
 
@@ -487,32 +658,40 @@ def main():
             "3-Year Price": None
         }
 
-        for iteration in range(4):  # Four iterations for different types of pricing
+        for iteration in range(4):  
             try:
-                if iteration == 0:
-                    print(f"Iteration {iteration + 1}: Getting on-demand price and link")
-                    row_result["On-Demand URL"], row_result["On-Demand Price"] = get_on_demand_pricing(
-                        os_name, no_of_instances,hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region
-                    )
+                if machine_type == "e2-micro":
+                    if iteration == 0:  
+                        print(f"Iteration {iteration + 1}: Getting on-demand price and link (e2-micro)")
+                        row_result["On-Demand URL"], row_result["On-Demand Price"] = get_on_demand_pricing(
+                            os_name, no_of_instances, hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region
+                        )
 
-                elif iteration == 1:
-                    print(f"Iteration {iteration + 1}: Getting sustained use discount (SUD) price and link")
-                    row_result["SUD URL"], row_result["SUD Price"] = get_sud_pricing(
-                        os_name, no_of_instances,hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region
-                    )
-
-                elif iteration == 2:
-                    print(f"Iteration {iteration + 1}: Getting 1-year commitment price and link")
-                    row_result["1-Year URL"], row_result["1-Year Price"] = get_one_year_pricing(
-                        os_name, no_of_instances,hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region
-                    )
-
-                elif iteration == 3:
-                    print(f"Iteration {iteration + 1}: Getting 3-year commitment price and link")
-                    row_result["3-Year URL"], row_result["3-Year Price"] = get_three_year_pricing(
-                        os_name, no_of_instances,hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region
-                    )
-
+                        row_result["SUD URL"], row_result["SUD Price"] = row_result["On-Demand URL"], row_result["On-Demand Price"]
+                        row_result["1-Year URL"], row_result["1-Year Price"] = row_result["On-Demand URL"], row_result["On-Demand Price"]
+                        row_result["3-Year URL"], row_result["3-Year Price"] = row_result["On-Demand URL"], row_result["On-Demand Price"]
+                        break 
+                else:
+                    if iteration == 0:
+                        print(f"Iteration {iteration + 1}: Getting on-demand price and link")
+                        row_result["On-Demand URL"], row_result["On-Demand Price"] = get_on_demand_pricing(
+                            os_name, no_of_instances, hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region
+                        )
+                    elif iteration == 1:
+                        print(f"Iteration {iteration + 1}: Getting sustained use discount (SUD) price and link")
+                        row_result["SUD URL"], row_result["SUD Price"] = get_sud_pricing(
+                            os_name, no_of_instances, hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region
+                        )
+                    elif iteration == 2:
+                        print(f"Iteration {iteration + 1}: Getting 1-year commitment price and link")
+                        row_result["1-Year URL"], row_result["1-Year Price"] = get_one_year_pricing(
+                            os_name, no_of_instances, hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region
+                        )
+                    elif iteration == 3:
+                        print(f"Iteration {iteration + 1}: Getting 3-year commitment price and link")
+                        row_result["3-Year URL"], row_result["3-Year Price"] = get_three_year_pricing(
+                            os_name, no_of_instances, hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region
+                        )
             except Exception as e:
                 print(f"Error processing row {index + 1}, iteration {iteration + 1}: {e}")
                 if iteration == 0:
@@ -533,10 +712,12 @@ def main():
         results.append(row_result)
 
 
+    output_file = "output_results.xlsx"  # Excel file extension
+
     output_df = pd.DataFrame(results)
     output_df.to_excel(output_file, index=False)
     print(f"Results saved to {output_file}")
-    
+        
     
 if __name__ == "__main__":
     main()
