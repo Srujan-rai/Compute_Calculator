@@ -273,9 +273,28 @@ def handle_machine_type(driver,actions,machine_type,machine_type_index):
     
     print("machine type selected")
     
-   
+def extended_mem_toggle_on(driver,actions):
+    time.sleep(2)
+    
+    pyautogui.hotkey('ctrl', 'f')
+    time.sleep(2)
+    
+    pyautogui.typewrite('Extended memory')
+    time.sleep(2)
+    
+    pyautogui.press('esc')
+    time.sleep(2)
+    actions.key_down(Keys.SHIFT).send_keys(Keys.TAB).key_up(Keys.SHIFT).perform()
+    time.sleep(1)
+    actions.send_keys(Keys.ENTER).perform()
+    print("extension toggle turned on")
+    
+    
+       
  
 def handle_vcpu_and_memory(driver,actions,vCPU,ram):
+    print(vCPU)
+    print(ram)
     time.sleep(2)
     
     pyautogui.hotkey('ctrl', 'f')
@@ -296,7 +315,9 @@ def handle_vcpu_and_memory(driver,actions,vCPU,ram):
         
     actions.send_keys(Keys.ENTER).perform()
     time.sleep(2)
-    actions.key_down(Keys.CONTROL).send_keys('a').key_up(Keys.CONTROL).send_keys(Keys.BACKSPACE).perform()
+    actions.send_keys(Keys.BACKSPACE).perform()
+    time.sleep(1)
+    actions.send_keys(Keys.BACKSPACE).perform()
     time.sleep(2)
     actions.send_keys(vCPU).perform()
     time.sleep(2)
@@ -317,10 +338,14 @@ def handle_vcpu_and_memory(driver,actions,vCPU,ram):
         actions.send_keys(Keys.TAB).perform()
         time.sleep(0.2)
         
-    actions.send_keys(Keys.ENTER).perform()
+    '''actions.send_keys(Keys.ENTER).perform()
     time.sleep(1)
-    actions.key_down(Keys.CONTROL).send_keys('a').key_up(Keys.CONTROL).send_keys(Keys.BACKSPACE).perform()
+    actions.send_keys(Keys.BACKSPACE).perform()
     time.sleep(1)
+    actions.send_keys(Keys.BACKSPACE).perform()'''
+    
+    time.sleep(2)
+
     actions.send_keys(ram).perform()
     
     
@@ -524,12 +549,21 @@ def get_on_demand_pricing( os_name, no_of_instances,hours_per_day, machine_famil
     
     if (machine_family.lower() == "general purpose" and series in ["N1", "N2", "N4", "E2", "N2D"] and not (series == "N1" and machine_type in ["f1-micro", "g1-small"])):
             print(f"Calling handle_vcpu_and_memory Machine Family: {machine_family}, Series: {series}, Type: {machine_type}")
-            handle_vcpu_and_memory(driver, actions, vCPU, ram)
+            
+            if machine_type=='custom':
+                extended_mem_toggle_on(driver,actions)
+                handle_vcpu_and_memory(driver, actions, vCPU, ram)
+            else:
+                handle_vcpu_and_memory(driver, actions, vCPU, ram)
             
         
     elif machine_family.lower() == "accelerator optimized" and series == "G2":
             print(f"Calling handle_vcpu_and_memory  Machine Family: {machine_family}, Series: {series}")
-            handle_vcpu_and_memory(driver, actions, vCPU, ram)
+            if machine_type=='custom':
+                extended_mem_toggle_on(driver,actions)
+                handle_vcpu_and_memory(driver, actions, vCPU, ram)
+            else:
+                handle_vcpu_and_memory(driver, actions, vCPU, ram)
            
             
     else:
@@ -608,12 +642,21 @@ def get_sud_pricing( os_name, no_of_instances,hours_per_day, machine_family, ser
     
     if (machine_family.lower() == "general purpose" and series in ["N1", "N2", "N4", "E2", "N2D"] and not (series == "N1" and machine_type in ["f1-micro", "g1-small"])):
             print(f"Calling handle_vcpu_and_memory Machine Family: {machine_family}, Series: {series}, Type: {machine_type}")
-            handle_vcpu_and_memory(driver, actions, vCPU, ram)
+            
+            if machine_type=='custom':
+                extended_mem_toggle_on(driver,actions)
+                handle_vcpu_and_memory(driver, actions, vCPU, ram)
+            else:
+                handle_vcpu_and_memory(driver, actions, vCPU, ram)
             
         
     elif machine_family.lower() == "accelerator optimized" and series == "G2":
             print(f"Calling handle_vcpu_and_memory  Machine Family: {machine_family}, Series: {series}")
-            handle_vcpu_and_memory(driver, actions, vCPU, ram)
+            if machine_type=='custom':
+                extended_mem_toggle_on(driver,actions)
+                handle_vcpu_and_memory(driver, actions, vCPU, ram)
+            else:
+                handle_vcpu_and_memory(driver, actions, vCPU, ram)
            
             
     else:
@@ -689,12 +732,21 @@ def get_one_year_pricing(os_name, no_of_instances,hours_per_day, machine_family,
     
     if (machine_family.lower() == "general purpose" and series in ["N1", "N2", "N4", "E2", "N2D"] and not (series == "N1" and machine_type in ["f1-micro", "g1-small"])):
             print(f"Calling handle_vcpu_and_memory Machine Family: {machine_family}, Series: {series}, Type: {machine_type}")
-            handle_vcpu_and_memory(driver, actions, vCPU, ram)
+            
+            if machine_type=='custom':
+                extended_mem_toggle_on(driver,actions)
+                handle_vcpu_and_memory(driver, actions, vCPU, ram)
+            else:
+                handle_vcpu_and_memory(driver, actions, vCPU, ram)
             
         
     elif machine_family.lower() == "accelerator optimized" and series == "G2":
             print(f"Calling handle_vcpu_and_memory  Machine Family: {machine_family}, Series: {series}")
-            handle_vcpu_and_memory(driver, actions, vCPU, ram)
+            if machine_type=='custom':
+                extended_mem_toggle_on(driver,actions)
+                handle_vcpu_and_memory(driver, actions, vCPU, ram)
+            else:
+                handle_vcpu_and_memory(driver, actions, vCPU, ram)
            
             
     else:
@@ -770,12 +822,21 @@ def  get_three_year_pricing(os_name, no_of_instances,hours_per_day, machine_fami
     
     if (machine_family.lower() == "general purpose" and series in ["N1", "N2", "N4", "E2", "N2D"] and not (series == "N1" and machine_type in ["f1-micro", "g1-small"])):
             print(f"Calling handle_vcpu_and_memory Machine Family: {machine_family}, Series: {series}, Type: {machine_type}")
-            handle_vcpu_and_memory(driver, actions, vCPU, ram)
+            
+            if machine_type=='custom':
+                extended_mem_toggle_on(driver,actions)
+                handle_vcpu_and_memory(driver, actions, vCPU, ram)
+            else:
+                handle_vcpu_and_memory(driver, actions, vCPU, ram)
             
         
     elif machine_family.lower() == "accelerator optimized" and series == "G2":
             print(f"Calling handle_vcpu_and_memory  Machine Family: {machine_family}, Series: {series}")
-            handle_vcpu_and_memory(driver, actions, vCPU, ram)
+            if machine_type=='custom':
+                extended_mem_toggle_on(driver,actions)
+                handle_vcpu_and_memory(driver, actions, vCPU, ram)
+            else:
+                handle_vcpu_and_memory(driver, actions, vCPU, ram)
            
             
     else:
@@ -829,6 +890,7 @@ def main():
         boot_disk_capacity = row["BootDisk Capacity"] if pd.notna(row["BootDisk Capacity"]) else 0
         region = row["Datacenter Location"] if pd.notna(row["Datacenter Location"]) else "Mumbai"
         hours_per_day = row["Hrs/Min"] if pd.notna(row["Hrs/Min"]) else 730
+        print(hours_per_day)
         
         '''if hours_per_day <730:
             same_costing=True'''
@@ -852,7 +914,7 @@ def main():
 
         for iteration in range(4):  
             try:
-                if machine_type == "e2-micro" or int(hours_per_day) < 730:
+                if machine_type == "e2-micro" :
                     if iteration == 0:  
                         print(f"Iteration {iteration + 1}: Getting on-demand price and link (e2-micro)")
                         row_result["On-Demand URL"], row_result["On-Demand Price"] = get_on_demand_pricing(
@@ -863,6 +925,27 @@ def main():
                         row_result["1-Year URL"], row_result["1-Year Price"] = row_result["On-Demand URL"], row_result["On-Demand Price"]
                         row_result["3-Year URL"], row_result["3-Year Price"] = row_result["On-Demand URL"], row_result["On-Demand Price"]
                         break 
+                
+                
+                elif hours_per_day < 730:
+                    if iteration==0:
+                        print(f"Iteration {iteration + 1}: Getting on-demand price and link (e2-micro)")
+                        row_result["On-Demand URL"], row_result["On-Demand Price"] = get_on_demand_pricing(
+                            os_name, no_of_instances, hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region
+                        )
+
+                    if iteration==1:
+                        print(f"Iteration {iteration + 1}: Getting sustained use discount (SUD) price and link")
+                        row_result["SUD URL"], row_result["SUD Price"] = get_sud_pricing(
+                            os_name, no_of_instances, hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region
+                        )
+                        
+                        row_result["1-Year URL"], row_result["1-Year Price"] = row_result["SUD URL"], row_result["SUD Price"]
+                        row_result["3-Year URL"], row_result["3-Year Price"] = row_result["SUD URL"], row_result["SUD Price"]
+                        break
+                    
+                
+                
                 else:
                     if iteration == 0:
                         print(f"Iteration {iteration + 1}: Getting on-demand price and link")

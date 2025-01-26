@@ -1,5 +1,5 @@
 Srno,No. of Instances,OS with version,Machine Class,Machine Family,Series,Machine Type,vCPUs,RAM,BootDisk Capacity,Gpu no,Gpu Type,WorkStation,Datacenter Location,Avg no. of hrs,Hrs/Min,Days/Month,Zonal/Regional,HDD,SSD,Balanced SSD,Snapshot
 1,1.0,"Free: Debian, CentOS, CoreOS, Ubuntu or BYOL",,general purpose,E2,e2-micro,,,,,,,,asia-south1,,,,,,,
 2,1.0,"Free: Debian, CentOS, CoreOS, Ubuntu or BYOL",,general purpose,N1,custom,1.0,3.75,,,,,,asia-south1,730.0,hours,month,,,,
-3,1.0,"Free: Debian, CentOS, CoreOS, Ubuntu or BYOL",,general purpose,N2D,custom,4.0,36.0,,,,,,asia-south1,730.0,hours,month,,,,
-4,1.0,"Free: Debian, CentOS, CoreOS, Ubuntu or BYOL",,general purpose,N2D,n1-highmem-2,4.0,32.0,,,,,,asia-south1,730.0,hours,month,,,,
+3,1.0,"Free: Debian, CentOS, CoreOS, Ubuntu or BYOL",,general purpose,N2D,custom,4.0,36.0,,,,,,asia-south1,94.0,hours,month,,,,
+4,1.0,"Free: Debian, CentOS, CoreOS, Ubuntu or BYOL",,general purpose,N2D,n1-highmem-2,4.0,32.0,,,,,,asia-south1,434.0,hours,month,,,,
