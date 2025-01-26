@@ -21,7 +21,7 @@ import json
 
 
 # File paths
-input_file = "filtered.csv"  # Input CSV file
+input_file = "filtered copy.csv"  # Input CSV file
 output_file = "output_results.csv"  # Output CSV file
 index_file = "index.json"
 
@@ -196,15 +196,32 @@ def no_handle_extension(driver,actions):
     
 def boot_disk_type(driver,actions):
     actions.send_keys(Keys.TAB).perform()
-    for _ in range(3):
+    for _ in range(1):
         actions.send_keys(Keys.TAB).perform()
         time.sleep(0.2)
     print("Boot Disk Type handled")
 
 def boot_disk_capacitys(driver,actions,boot_disk_capacity):
+    time.sleep(1)
+    pyautogui.hotkey('ctrl', 'f')
+    time.sleep(2)
+    
+    pyautogui.typewrite('Boot disk size (GiB)')
+    time.sleep(3)
+    
+    pyautogui.press('esc')
+    time.sleep(3)
+    for _ in range(3):
+        actions.send_keys(Keys.TAB).perform()
+        time.sleep(0.2)
+        
     actions.send_keys(Keys.ENTER).perform()
-    actions.send_keys(Keys.BACKSPACE).perform()
-    actions.send_keys(boot_disk_capacity).perform()
+    pyautogui.typewrite(str(boot_disk_capacity))
+    time.sleep(3) 
+    actions.send_keys(Keys.ENTER).perform()
+   
+    
+    print("boot disk selected selected")
    
 
 def move_to_region(driver,actions,move):
@@ -261,14 +278,16 @@ def get_price_with_js(driver):
 
 
 def sud_toggle_on(driver,actions):
+    time.sleep(1)
     pyautogui.hotkey('ctrl', 'f')
     time.sleep(2)
     
-    pyautogui.typewrite('Add sustained use discounts')
+    pyautogui.typewrite('Add sustained use')
     time.sleep(3)
     
     pyautogui.press('esc')
     time.sleep(3)
+    actions.send_keys(Keys.ENTER).perform()
     
     actions.key_down(Keys.SHIFT).send_keys(Keys.TAB).key_up(Keys.SHIFT).perform()
     time.sleep(1)
@@ -276,6 +295,7 @@ def sud_toggle_on(driver,actions):
     print("Sud turned on")
 
 def one_year_selection(driver,actions):
+    time.sleep(2)
     pyautogui.hotkey('ctrl', 'f')
     time.sleep(2)
     
@@ -284,17 +304,20 @@ def one_year_selection(driver,actions):
     
     pyautogui.press('esc')
     time.sleep(3)   
+    actions.send_keys(Keys.ENTER).perform()
     
     for _ in range(2):
         actions.send_keys(Keys.TAB).perform()
         time.sleep(0.2)
     actions.send_keys(Keys.ARROW_RIGHT).perform()
     actions.send_keys(Keys.ENTER).perform()
+    print("one_year_selection completed")
 
 
 
 
 def three_year_selection(driver,actions):
+    time.sleep(3)
     pyautogui.hotkey('ctrl', 'f')
     time.sleep(2)
     
@@ -303,6 +326,7 @@ def three_year_selection(driver,actions):
     
     pyautogui.press('esc')
     time.sleep(2)   
+    actions.send_keys(Keys.ENTER).perform()
     
     for _ in range(2):
         actions.send_keys(Keys.TAB).perform()
@@ -311,6 +335,7 @@ def three_year_selection(driver,actions):
     time.sleep(0.2)
     actions.send_keys(Keys.ARROW_RIGHT).perform()
     actions.send_keys(Keys.ENTER).perform()
+    print("three_year_selection completeed")
   
     
 
@@ -433,6 +458,9 @@ def get_on_demand_pricing( os_name, no_of_instances,hours_per_day, machine_famil
 def get_sud_pricing( os_name, no_of_instances,hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region):
     print("sud pricing")
     os_index = get_os_index(os_name)
+    machine_family_index = get_index(machine_family, indices)
+    series_index = get_index(series, indices)
+    machine_type_index = get_index(machine_type, indices)
     download_directory = os.path.join(os.getcwd(), "downloads")
     os.makedirs(download_directory, exist_ok=True)
     chrome_options = webdriver.ChromeOptions()
@@ -453,9 +481,9 @@ def get_sud_pricing( os_name, no_of_instances,hours_per_day, machine_family, ser
     handle_instance(driver,actions,no_of_instances)
     handle_hours_per_day(driver,actions,hours_per_day)
     handle_os(driver,actions,os_index)
-    handle_machine_family(driver,actions,machine_family)
-    handle_series(driver,actions,series)
-    handle_machine_type(driver,actions,machine_type)
+    handle_machine_family(driver,actions,machine_family_index)
+    handle_series(driver,actions,series_index)
+    handle_machine_type(driver,actions,machine_type,machine_type_index)
     
     if (machine_family.lower() == "general purpose" and series in ["N1", "N2", "N4", "E2", "N2D"] and not (series == "N1" and machine_type in ["f1-micro", "g1-small"])):
             print(f"Calling handle_vcpu_and_memory Machine Family: {machine_family}, Series: {series}, Type: {machine_type}")
@@ -490,6 +518,9 @@ def get_sud_pricing( os_name, no_of_instances,hours_per_day, machine_family, ser
 def get_one_year_pricing(os_name, no_of_instances,hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region):
     print("1 year pricing")
     os_index = get_os_index(os_name)
+    machine_family_index = get_index(machine_family, indices)
+    series_index = get_index(series, indices)
+    machine_type_index = get_index(machine_type, indices)
     download_directory = os.path.join(os.getcwd(), "downloads")
     os.makedirs(download_directory, exist_ok=True)
     chrome_options = webdriver.ChromeOptions()
@@ -510,9 +541,9 @@ def get_one_year_pricing(os_name, no_of_instances,hours_per_day, machine_family,
     handle_instance(driver,actions,no_of_instances)
     handle_hours_per_day(driver,actions,hours_per_day)
     handle_os(driver,actions,os_index)
-    handle_machine_family(driver,actions,machine_family)
-    handle_series(driver,actions,series)
-    handle_machine_type(driver,actions,machine_type)
+    handle_machine_family(driver,actions,machine_family_index)
+    handle_series(driver,actions,series_index)
+    handle_machine_type(driver,actions,machine_type,machine_type_index)
     
     if (machine_family.lower() == "general purpose" and series in ["N1", "N2", "N4", "E2", "N2D"] and not (series == "N1" and machine_type in ["f1-micro", "g1-small"])):
             print(f"Calling handle_vcpu_and_memory Machine Family: {machine_family}, Series: {series}, Type: {machine_type}")
@@ -531,8 +562,9 @@ def get_one_year_pricing(os_name, no_of_instances,hours_per_day, machine_family,
     
     boot_disk_capacitys(driver,actions,boot_disk_capacity) 
     
-    
+    select_region(driver,actions,region)
     one_year_selection(driver,actions)
+    time.sleep(5)
     
     
     
@@ -545,6 +577,9 @@ def get_one_year_pricing(os_name, no_of_instances,hours_per_day, machine_family,
 def  get_three_year_pricing(os_name, no_of_instances,hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region):
     print("3 year pricing")
     os_index = get_os_index(os_name)
+    machine_family_index = get_index(machine_family, indices)
+    series_index = get_index(series, indices)
+    machine_type_index = get_index(machine_type, indices)
     download_directory = os.path.join(os.getcwd(), "downloads")
     os.makedirs(download_directory, exist_ok=True)
     chrome_options = webdriver.ChromeOptions()
@@ -566,9 +601,9 @@ def  get_three_year_pricing(os_name, no_of_instances,hours_per_day, machine_fami
     handle_instance(driver,actions,no_of_instances)
     handle_hours_per_day(driver,actions,hours_per_day)
     handle_os(driver,actions,os_index)
-    handle_machine_family(driver,actions,machine_family)
-    handle_series(driver,actions,series)
-    handle_machine_type(driver,actions,machine_type)
+    handle_machine_family(driver,actions,machine_family_index)
+    handle_series(driver,actions,series_index)
+    handle_machine_type(driver,actions,machine_type,machine_type_index)
     
     if (machine_family.lower() == "general purpose" and series in ["N1", "N2", "N4", "E2", "N2D"] and not (series == "N1" and machine_type in ["f1-micro", "g1-small"])):
             print(f"Calling handle_vcpu_and_memory Machine Family: {machine_family}, Series: {series}, Type: {machine_type}")
@@ -590,8 +625,10 @@ def  get_three_year_pricing(os_name, no_of_instances,hours_per_day, machine_fami
     
     
     
-    
+    select_region(driver,actions,region)
     three_year_selection(driver,actions)
+    
+    time.sleep(5)
     price=get_price_with_js(driver)
     current_url = driver.current_url
     print(price,current_url)
@@ -644,7 +681,7 @@ def main():
         machine_type = row["Machine Type"].lower() if pd.notna(row["Machine Type"]) else "custom"
         vCPU = row["vCPUs"] if pd.notna(row["vCPUs"]) else 2
         ram = row["RAM"] if pd.notna(row["RAM"]) else 2
-        boot_disk_capacity = row["BootDisk Capacity"] if pd.notna(row["BootDisk Capacity"]) else 10
+        boot_disk_capacity = int(float(row["BootDisk Capacity"])) if pd.notna(row["BootDisk Capacity"]) else 10
         region = row["Datacenter Location"] if pd.notna(row["Datacenter Location"]) else "Mumbai"
         hours_per_day = row["Hrs/Min"] if pd.notna(row["Hrs/Min"]) else 730
         
