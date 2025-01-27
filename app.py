@@ -20,8 +20,12 @@ import smtplib
 from email.message import EmailMessage
 import requests
 from flask import Flask, request
+import os
+os.environ["DISPLAY"] = ":99"
 
 app=Flask(__name__)
+
+
 
 
 index_file = "index.json"
@@ -501,6 +505,9 @@ def get_price_with_js(driver):
         return f"An unexpected JavaScript error occurred: {str(e)}"
 
 
+def move_to_region(driver,actions,moves):
+    pass
+    
 
 
 def sud_toggle_on(driver,actions):
