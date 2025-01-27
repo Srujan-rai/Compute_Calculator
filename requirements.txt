@@ -2,5 +2,5 @@ selenium
 pyautogui
 flask
 pandas
-openpyxl
 requests
+openpyxl
