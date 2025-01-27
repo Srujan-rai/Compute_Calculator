@@ -16,6 +16,13 @@ import re
 import csv
 import glob
 import json
+import smtplib
+from email.message import EmailMessage
+import requests
+from flask import Flask, request
+
+app=Flask(__name__)
+
 
 
 
@@ -23,7 +30,7 @@ index_file = "index.json"
 
 
 
-input_file = "resourses/jane new GcpData- - ComputeEngine (2).csv"  # Replace with your input file path
+input_file = "sheet.csv"  # Replace with your input file path
 
 
 output_file_filtered = "output.csv" 
@@ -31,6 +38,13 @@ input_filtered_file="output.csv"
 
 
 output_file = "output_results.csv"
+
+sender_email = "srujan.int@niveussolutions.com"
+sender_password = "rmlh ikej rtmz ejme"
+subject = "Compute Calculation Results"
+body = "Please find the attached file for the results of the computation."
+file_path = "output_results.xlsx"
+
 
 with open('knowledge_base.json', 'r') as kb_file:
     knowledge_base = json.load(kb_file)
@@ -50,6 +64,59 @@ os_mapping = {
     r"sles": "Paid: SLES"
 }
 
+
+def extract_sheet_id(sheet_url):
+    pattern = r"https://docs\.google\.com/spreadsheets/d/([a-zA-Z0-9-_]+)"
+    match = re.search(pattern, sheet_url)
+    if match:
+        return match.group(1)
+    else:
+        raise ValueError("Invalid Google Sheet URL")
+
+def download_sheet(sheet_url):
+    try:
+        sheet_id = extract_sheet_id(sheet_url)
+        csv_url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=csv"
+        response = requests.get(csv_url)
+
+        if response.status_code == 200:
+            with open("sheet.csv", "wb") as f:
+                f.write(response.content)
+            print("Google Sheet downloaded as sheet.csv")
+        else:
+            print("Failed to download sheet. HTTP Status Code:", response.status_code)
+    except ValueError as e:
+        print(e)
+    except Exception as e:
+        print("An error occurred:", e)
+
+
+
+
+def send_email_with_attachment(sender_email, sender_password, recipient_email, subject, body, file_path):
+    try:
+        
+        msg = EmailMessage()
+        msg['Subject'] = subject
+        msg['From'] = sender_email
+        msg['To'] = recipient_email
+        msg.set_content(body)
+
+        
+        with open(file_path, 'rb') as file:
+            file_data = file.read()
+            file_name = file_path.split('/')[-1]  # Get the file name from the path
+            msg.add_attachment(file_data, maintype='application', subtype='octet-stream', filename=file_name)
+
+       
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+            smtp.login(sender_email, sender_password)
+            smtp.send_message(msg)
+        print("Email sent successfully.")
+    except Exception as e:
+        print(f"Failed to send email: {e}")
+
+
 def map_os(value, os_mapping):
     for pattern, replacement in os_mapping.items():
         if re.search(pattern, value, re.IGNORECASE):
@@ -63,10 +130,8 @@ def map_value(value, knowledge_base):
     return value 
 
 def process_csv(input_file, output_file):
-    # Read the input CSV
     df = pd.read_csv(input_file)
 
-    # Fill default values for empty columns
     if 'OS with version' in df.columns:
         df['OS with version'] = df['OS with version'].apply(
             lambda x: map_os(str(x).strip(), os_mapping) if pd.notnull(x) else "Free: Debian, CentOS, CoreOS, Ubuntu or BYOL"
@@ -81,12 +146,10 @@ def process_csv(input_file, output_file):
     if 'Machine Type' in df.columns:
         df['Machine Type'] = df['Machine Type'].fillna("custom")
 
-    # Columns to map using the knowledge base
     columns_to_map = ["Machine Family", "Series", "Machine Type"]
 
     for column in columns_to_map:
         if column in df.columns:
-            # Apply mapping to each value in the column
             df[column] = df[column].apply(lambda x: map_value(str(x).strip(), knowledge_base) if pd.notnull(x) else x)
 
     
@@ -194,7 +257,7 @@ def handle_os(driver,actions,os_index,os_name):
     actions.send_keys(Keys.ENTER).perform()
     time.sleep(1)
     pyautogui.hotkey('ctrl', 'f')
-    time.sleep(2)
+    time.sleep(1)
     
     pyautogui.typewrite(os_name)
     time.sleep(2)
@@ -211,7 +274,7 @@ def handle_os(driver,actions,os_index,os_name):
 def handle_machine_family(driver,actions,machine_family_index,machine_family):
     time.sleep(1)
     pyautogui.hotkey('ctrl', 'f')
-    time.sleep(2)
+    time.sleep(1)
     
     pyautogui.typewrite('Machine Family')
     time.sleep(2)
@@ -222,7 +285,7 @@ def handle_machine_family(driver,actions,machine_family_index,machine_family):
     actions.send_keys(Keys.ENTER).perform()
     time.sleep(1)
     pyautogui.hotkey('ctrl', 'f')
-    time.sleep(2)
+    time.sleep(1)
     
     pyautogui.typewrite(machine_family)
     time.sleep(2)
@@ -241,7 +304,7 @@ def handle_series(driver,actions,series_index,series):
     actions.send_keys(Keys.ENTER).perform()
     time.sleep(1)
     pyautogui.hotkey('ctrl', 'f')
-    time.sleep(2)
+    time.sleep(1)
     
     pyautogui.typewrite(series)
     time.sleep(2)
@@ -264,7 +327,7 @@ def handle_machine_type(driver,actions,machine_type,machine_type_index):
     time.sleep(2)
     
     pyautogui.typewrite(machine_type)
-    time.sleep(3)
+    time.sleep(2)
     
     pyautogui.press('esc')
     time.sleep(2)   
@@ -274,10 +337,10 @@ def handle_machine_type(driver,actions,machine_type,machine_type_index):
     print("machine type selected")
     
 def extended_mem_toggle_on(driver,actions):
-    time.sleep(2)
+    time.sleep(1)
     
     pyautogui.hotkey('ctrl', 'f')
-    time.sleep(2)
+    time.sleep(1)
     
     pyautogui.typewrite('Extended memory')
     time.sleep(2)
@@ -295,10 +358,10 @@ def extended_mem_toggle_on(driver,actions):
 def handle_vcpu_and_memory(driver,actions,vCPU,ram):
     print(vCPU)
     print(ram)
-    time.sleep(2)
+    time.sleep(1)
     
     pyautogui.hotkey('ctrl', 'f')
-    time.sleep(2)
+    time.sleep(1)
     
     pyautogui.typewrite('Number of vCPUs')
     time.sleep(2)
@@ -314,16 +377,16 @@ def handle_vcpu_and_memory(driver,actions,vCPU,ram):
         
         
     actions.send_keys(Keys.ENTER).perform()
-    time.sleep(2)
+    time.sleep(1)
     actions.send_keys(Keys.BACKSPACE).perform()
     time.sleep(1)
     actions.send_keys(Keys.BACKSPACE).perform()
-    time.sleep(2)
+    time.sleep(1)
     actions.send_keys(vCPU).perform()
-    time.sleep(2)
+    time.sleep(1)
     
     pyautogui.hotkey('ctrl', 'f')
-    time.sleep(2)
+    time.sleep(1)
     
     pyautogui.typewrite('Amount of memory')
     time.sleep(2)
@@ -338,13 +401,8 @@ def handle_vcpu_and_memory(driver,actions,vCPU,ram):
         actions.send_keys(Keys.TAB).perform()
         time.sleep(0.2)
         
-    '''actions.send_keys(Keys.ENTER).perform()
+   
     time.sleep(1)
-    actions.send_keys(Keys.BACKSPACE).perform()
-    time.sleep(1)
-    actions.send_keys(Keys.BACKSPACE).perform()'''
-    
-    time.sleep(2)
 
     actions.send_keys(ram).perform()
     
@@ -358,7 +416,7 @@ def handle_vcpu_and_memory(driver,actions,vCPU,ram):
 def boot_disk_type(driver,actions):
     time.sleep(1)
     pyautogui.hotkey('ctrl', 'f')
-    time.sleep(2)
+    time.sleep(1)
     
     pyautogui.typewrite('Boot disk type')
     time.sleep(2)
@@ -373,7 +431,7 @@ def boot_disk_type(driver,actions):
 def boot_disk_capacitys(driver,actions,boot_disk_capacity):
     time.sleep(1)
     pyautogui.hotkey('ctrl', 'f')
-    time.sleep(2)
+    time.sleep(1)
     
     pyautogui.typewrite('Boot disk size (GiB)')
     time.sleep(2)
@@ -387,9 +445,9 @@ def boot_disk_capacitys(driver,actions,boot_disk_capacity):
    
     
     actions.send_keys(Keys.ENTER).perform()
-    time.sleep(2)
+    time.sleep(1)
     actions.send_keys(Keys.BACKSPACE).perform()
-    time.sleep(2)
+    time.sleep(1)
     pyautogui.typewrite(str(boot_disk_capacity))
     time.sleep(1)
     actions.send_keys(Keys.TAB).perform()
@@ -401,7 +459,7 @@ def boot_disk_capacitys(driver,actions,boot_disk_capacity):
 def select_region(driver, actions, region):
     time.sleep(1)
     pyautogui.hotkey('ctrl', 'f')
-    time.sleep(2)
+    time.sleep(1)
     
     pyautogui.typewrite('Region')
     time.sleep(2)
@@ -412,7 +470,7 @@ def select_region(driver, actions, region):
     actions.send_keys(Keys.ENTER).perform()
     time.sleep(1)
     pyautogui.hotkey('ctrl', 'f')
-    time.sleep(2)
+    time.sleep(1)
     
     pyautogui.typewrite(region)
     time.sleep(2)
@@ -452,7 +510,7 @@ def move_to_region(driver,actions,moves):
 
 def sud_toggle_on(driver,actions):
     pyautogui.hotkey('ctrl', 'f')
-    time.sleep(2)
+    time.sleep(1)
     
     pyautogui.typewrite('Add sustained use discounts')
     time.sleep(2)
@@ -466,9 +524,9 @@ def sud_toggle_on(driver,actions):
     print("Sud turned on")
 
 def one_year_selection(driver,actions):
-    time.sleep(2)
+    time.sleep(1)
     pyautogui.hotkey('ctrl', 'f')
-    time.sleep(2)
+    time.sleep(1)
     
     pyautogui.typewrite('Committed use discount options')
     time.sleep(2)
@@ -486,9 +544,9 @@ def one_year_selection(driver,actions):
 
 
 def three_year_selection(driver,actions):
-    time.sleep(2)
+    time.sleep(1)
     pyautogui.hotkey('ctrl', 'f')
-    time.sleep(2)
+    time.sleep(1)
     
     pyautogui.typewrite('Committed use discount options')
     time.sleep(2)
@@ -537,15 +595,15 @@ def get_on_demand_pricing( os_name, no_of_instances,hours_per_day, machine_famil
     home_page(driver,actions)
     handle_instance(driver,actions,no_of_instances)
     handle_hours_per_day(driver,actions,hours_per_day)
-    time.sleep(1)
+    #time.sleep(1)
     handle_os(driver,actions,os_index,os_name)
-    time.sleep(1)
+    #time.sleep(1)
     handle_machine_family(driver,actions,machine_family_index,machine_family)
-    time.sleep(1)
+    #time.sleep(1)
     handle_series(driver,actions,series_index,series)
-    time.sleep(1)
+    #time.sleep(1)
     handle_machine_type(driver,actions,machine_type,machine_type_index)
-    time.sleep(1)
+    #time.sleep(1)
     
     if (machine_family.lower() == "general purpose" and series in ["N1", "N2", "N4", "E2", "N2D"] and not (series == "N1" and machine_type in ["f1-micro", "g1-small"])):
             print(f"Calling handle_vcpu_and_memory Machine Family: {machine_family}, Series: {series}, Type: {machine_type}")
@@ -569,12 +627,12 @@ def get_on_demand_pricing( os_name, no_of_instances,hours_per_day, machine_famil
     else:
         print(f"Skipping handle_vcpu_and_memory: Machine Family: {machine_family}, Series: {series}, Type: {machine_type}")
     
-    time.sleep(1)
+    #time.sleep(1)
     boot_disk_type(driver,actions)
-    time.sleep(1)
+    #time.sleep(1)
     boot_disk_capacitys(driver,actions,boot_disk_capacity)    
     
-    time.sleep(1)
+    #time.sleep(1)
 
     
 
@@ -628,17 +686,17 @@ def get_sud_pricing( os_name, no_of_instances,hours_per_day, machine_family, ser
     
     home_page(driver,actions)
     handle_instance(driver,actions,no_of_instances)
-    time.sleep(1)
+    #time.sleep(1)
     handle_hours_per_day(driver,actions,hours_per_day)
-    time.sleep(1)
+    #time.sleep(1)
     handle_os(driver,actions,os_index,os_name)
-    time.sleep(1)
+    #time.sleep(1)
     handle_machine_family(driver,actions,machine_family_index,machine_family)
-    time.sleep(1)
+    #time.sleep(1)
     handle_series(driver,actions,series_index,series)
-    time.sleep(1)
+    #time.sleep(1)
     handle_machine_type(driver,actions,machine_type,machine_type_index)
-    time.sleep(1)
+    #time.sleep(1)
     
     if (machine_family.lower() == "general purpose" and series in ["N1", "N2", "N4", "E2", "N2D"] and not (series == "N1" and machine_type in ["f1-micro", "g1-small"])):
             print(f"Calling handle_vcpu_and_memory Machine Family: {machine_family}, Series: {series}, Type: {machine_type}")
@@ -662,16 +720,16 @@ def get_sud_pricing( os_name, no_of_instances,hours_per_day, machine_family, ser
     else:
         print(f"Skipping handle_vcpu_and_memory: Machine Family: {machine_family}, Series: {series}, Type: {machine_type}")
     
-    time.sleep(1)
+    #time.sleep(1)
     boot_disk_type(driver,actions)
-    time.sleep(1)
+    #time.sleep(1)
     boot_disk_capacitys(driver,actions,boot_disk_capacity)    
     
-    time.sleep(2)
+    #time.sleep(2)
 
     sud_toggle_on(driver,actions)
     
-    time.sleep(2)
+    #time.sleep(2)
     select_region(driver,actions,region)
     
         
@@ -718,17 +776,17 @@ def get_one_year_pricing(os_name, no_of_instances,hours_per_day, machine_family,
     
     home_page(driver,actions)
     handle_instance(driver,actions,no_of_instances)
-    time.sleep(1)
+    #time.sleep(1)
     handle_hours_per_day(driver,actions,hours_per_day)
-    time.sleep(1)
+    #time.sleep(1)
     handle_os(driver,actions,os_index,os_name)
-    time.sleep(1)
+    #time.sleep(1)
     handle_machine_family(driver,actions,machine_family_index,machine_family)
-    time.sleep(1)
+    #time.sleep(1)
     handle_series(driver,actions,series_index,series)
-    time.sleep(1)
+    #time.sleep(1)
     handle_machine_type(driver,actions,machine_type,machine_type_index)
-    time.sleep(1)
+    #time.sleep(1)
     
     if (machine_family.lower() == "general purpose" and series in ["N1", "N2", "N4", "E2", "N2D"] and not (series == "N1" and machine_type in ["f1-micro", "g1-small"])):
             print(f"Calling handle_vcpu_and_memory Machine Family: {machine_family}, Series: {series}, Type: {machine_type}")
@@ -752,18 +810,18 @@ def get_one_year_pricing(os_name, no_of_instances,hours_per_day, machine_family,
     else:
         print(f"Skipping handle_vcpu_and_memory: Machine Family: {machine_family}, Series: {series}, Type: {machine_type}")
     
-    time.sleep(1)
+    #time.sleep(1)
     boot_disk_type(driver,actions)
-    time.sleep(1)
+    #time.sleep(1)
     boot_disk_capacitys(driver,actions,boot_disk_capacity)    
     
-    time.sleep(1)
+    #time.sleep(1)
 
     
 
     select_region(driver,actions,region)
     
-    time.sleep(1)
+    #time.sleep(1)
     
     one_year_selection(driver,actions)  
         
@@ -808,17 +866,17 @@ def  get_three_year_pricing(os_name, no_of_instances,hours_per_day, machine_fami
     
     home_page(driver,actions)
     handle_instance(driver,actions,no_of_instances)
-    time.sleep(1)
+    #time.sleep(1)
     handle_hours_per_day(driver,actions,hours_per_day)
-    time.sleep(1)
+    #time.sleep(1)
     handle_os(driver,actions,os_index,os_name)
-    time.sleep(1)
+    #time.sleep(1)
     handle_machine_family(driver,actions,machine_family_index,machine_family)
-    time.sleep(1)
+    #time.sleep(1)
     handle_series(driver,actions,series_index,series)
-    time.sleep(1)
+    #time.sleep(1)
     handle_machine_type(driver,actions,machine_type,machine_type_index)
-    time.sleep(1)
+    #time.sleep(1)
     
     if (machine_family.lower() == "general purpose" and series in ["N1", "N2", "N4", "E2", "N2D"] and not (series == "N1" and machine_type in ["f1-micro", "g1-small"])):
             print(f"Calling handle_vcpu_and_memory Machine Family: {machine_family}, Series: {series}, Type: {machine_type}")
@@ -842,19 +900,16 @@ def  get_three_year_pricing(os_name, no_of_instances,hours_per_day, machine_fami
     else:
         print(f"Skipping handle_vcpu_and_memory: Machine Family: {machine_family}, Series: {series}, Type: {machine_type}")
     
-    time.sleep(1)
+    #time.sleep(1)
     boot_disk_type(driver,actions)
-    time.sleep(1)
+    #time.sleep(1)
     boot_disk_capacitys(driver,actions,boot_disk_capacity)    
     
-    time.sleep(1)
-
+    #time.sleep(1)
     
-
     select_region(driver,actions,region)
     
-        
-    time.sleep(1)
+    #time.sleep(1)
     
     three_year_selection(driver,actions)
     
@@ -874,7 +929,9 @@ def  get_three_year_pricing(os_name, no_of_instances,hours_per_day, machine_fami
 #=============================================================================================#
 
 
-def main():
+def main(sheet_url,recipient_email):
+    download_sheet(sheet_url)
+
     process_csv(input_file, output_file_filtered)
     sheet = pd.read_csv(input_filtered_file)
     results = []
@@ -992,11 +1049,21 @@ def main():
     output_df = pd.DataFrame(results)
     output_df.to_excel(output_file, index=False)
     print(f"Results saved to {output_file}")
+    print("sending mail!!")
+    send_email_with_attachment(sender_email, sender_password, recipient_email, subject, body, file_path)
+
+
+@app.route('/calculate',methods=["POST"])
+def run_automation():
+    sheet = request.form.get('sheet')
+    email = request.form.get('email')
+    
+    main(sheet,email)
+    
+    
+
         
     
 if __name__ == "__main__":
-    start_time=time.time()
-    main()
-    stop_time=time.time()
-    minutes=(stop_time-start_time)/60
-    print(f'Excution time {minutes:.2f} minutes')
+    
+    app.run(debug=True)
