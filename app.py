@@ -20,8 +20,7 @@ import smtplib
 from email.message import EmailMessage
 import requests
 from flask import Flask, request
-import os
-os.environ["DISPLAY"] = ":99"
+
 
 app=Flask(__name__)
 
