@@ -249,7 +249,7 @@ def handle_instance(driver,actions,no_of_instance,hours_per_day):
     for _ in range(3):
         actions.send_keys(Keys.TAB).perform()
         time.sleep(0.2)
-    actions.send_keys(int(no_of_instance)).perform()
+    actions.send_keys(float(no_of_instance)).perform()
     for _ in range(4):
         actions.send_keys(Keys.TAB).perform()
         time.sleep(0.2)
@@ -437,10 +437,7 @@ def handle_vcpu_and_memory(driver,actions,vCPU,ram):
     pyautogui.write(ram, interval=0.1)
     pyautogui.press("enter")
 
-    
-    
-    
-    
+  
     print("vpcu and ram selected")
     
     
