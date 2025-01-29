@@ -20,7 +20,7 @@ import smtplib
 from email.message import EmailMessage
 import requests
 from flask import Flask, request
-
+import pyperclip
 app=Flask(__name__)
 
 
@@ -75,6 +75,7 @@ def extract_sheet_id(sheet_url):
 
 def download_sheet(sheet_url):
     try:
+        print("downloading the sheet !!")
         sheet_id = extract_sheet_id(sheet_url)
         csv_url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=csv"
         response = requests.get(csv_url)
@@ -218,40 +219,23 @@ def home_page(driver,actions):
         actions.move_to_element(div_element).click().perform()
         time.sleep(2)
 
-def handle_instance(driver,actions,no_of_instance,hours_per_day):
-    for _ in range(5):
+def handle_instance(driver,actions,no_of_instance):
+    for _ in range(6):
         actions.send_keys(Keys.TAB).perform()
         time.sleep(0.2)
-        
-    actions.send_keys(Keys.ENTER).perform()
-    time.sleep(0.2)
-    actions.send_keys(Keys.TAB).perform()
-    time.sleep(0.2)
-    actions.send_keys(Keys.ENTER).perform()
-    time.sleep(0.2)
-
-    if hours_per_day > 4:
-        actions.send_keys(Keys.ENTER).perform()
-        time.sleep(0.2) 
-        actions.send_keys(Keys.TAB).perform()
-        time.sleep(0.2)
-    else:
-        actions.send_keys(Keys.ENTER).perform()
-        time.sleep(0.2)
-        actions.send_keys(Keys.TAB).perform()
-        time.sleep(0.2)
-        actions.send_keys(Keys.ENTER).perform()
-        time.sleep(0.2)
-        
-        
-        
-    
+    #actions.send_keys(Keys.ENTER).perform()
     for _ in range(3):
         actions.send_keys(Keys.TAB).perform()
         time.sleep(0.2)
-    no_of_instance = float(no_of_instance)  # Convert string to float
-    formatted_number = f"{no_of_instance:.2f}"  # Ensures 2 decimal places, e.g., 3.60
-    pyautogui.write(formatted_number, interval=0.1) 
+    no_of_instance=float(no_of_instance)
+    formatted_number=f"{no_of_instance:.1f}"
+    print(formatted_number)
+    #pyautogui.write(formatted_number, interval=0.8)  # Adds a slight delay for accuracy
+    actions.send_keys(formatted_number).perform()
+    
+        
+        
+        
     for _ in range(4):
         actions.send_keys(Keys.TAB).perform()
         time.sleep(0.2)
@@ -259,23 +243,20 @@ def handle_instance(driver,actions,no_of_instance,hours_per_day):
 
 
 def handle_hours_per_day(driver,actions,hours_per_day):
-    time.sleep(0.8)
-    pyautogui.hotkey('ctrl', 'f')
-    time.sleep(0.8)
-    
-    pyautogui.typewrite('Total instance usage time')
-    time.sleep(0.8)
-    
-    pyautogui.press('esc')
-    time.sleep(0.8)
-    
-    actions.send_keys(Keys.ENTER).perform()
-    
-    for _ in range(3):
-        actions.send_keys(Keys.TAB).perform()
-        time.sleep(0.2)
-    pyautogui.write(hours_per_day, interval=0.1)
-
+    if hours_per_day==0:
+        for _ in range(3):
+            actions.send_keys(Keys.TAB).perform()
+            time.sleep(0.2)
+        print("default hours")
+        pass
+        
+    else:
+        actions.send_keys(hours_per_day).perform()
+        time.sleep(1)
+        for _ in range(3):
+            actions.send_keys(Keys.TAB).perform()
+            time.sleep(0.2)
+        print("Hours handled")
 
 
 def handle_os(driver,actions,os_index,os_name):
@@ -634,7 +615,7 @@ def get_on_demand_pricing( os_name, no_of_instances,hours_per_day, machine_famil
     driver.implicitly_wait(10)
     
     home_page(driver,actions)
-    handle_instance(driver,actions,no_of_instances,hours_per_day)
+    handle_instance(driver,actions,no_of_instances)
     handle_hours_per_day(driver,actions,hours_per_day)
     #time.sleep(0.8)
     handle_os(driver,actions,os_index,os_name)
@@ -727,7 +708,7 @@ def get_sud_pricing( os_name, no_of_instances,hours_per_day, machine_family, ser
     driver.implicitly_wait(10)
     
     home_page(driver,actions)
-    handle_instance(driver,actions,no_of_instances,hours_per_day)
+    handle_instance(driver,actions,no_of_instances)
     #time.sleep(0.8)
     handle_hours_per_day(driver,actions,hours_per_day)
     #time.sleep(0.8)
@@ -818,7 +799,7 @@ def get_one_year_pricing(os_name, no_of_instances,hours_per_day, machine_family,
     driver.implicitly_wait(10)
     
     home_page(driver,actions)
-    handle_instance(driver,actions,no_of_instances,hours_per_day)
+    handle_instance(driver,actions,no_of_instances)
     #time.sleep(0.8)
     handle_hours_per_day(driver,actions,hours_per_day)
     #time.sleep(0.8)
@@ -909,7 +890,7 @@ def  get_three_year_pricing(os_name, no_of_instances,hours_per_day, machine_fami
     driver.implicitly_wait(10)
     
     home_page(driver,actions)
-    handle_instance(driver,actions,no_of_instances,hours_per_day)
+    handle_instance(driver,actions,no_of_instances)
     #time.sleep(0.8)
     handle_hours_per_day(driver,actions,hours_per_day)
     #time.sleep(0.8)
@@ -991,7 +972,7 @@ def main(sheet_url,recipient_email):
         ram = row["RAM"] if pd.notna(row["RAM"]) else 0
         boot_disk_capacity = row["BootDisk Capacity"] if pd.notna(row["BootDisk Capacity"]) else 0
         region = row["Datacenter Location"] if pd.notna(row["Datacenter Location"]) else "Mumbai"
-        hours_per_day = int(row["Hrs/Min"]) if pd.notna(row["Hrs/Min"]) else 730
+        hours_per_day = int(row["Hrs/Min"]) if pd.notna(row["Hrs/Min"]) else 0
         print(hours_per_day)
         
         '''if hours_per_day <730:
@@ -1098,7 +1079,6 @@ def run_automation():
     
 
         
-    
 if __name__ == "__main__":
     
     app.run(debug=True,use_reloader=False,host='0.0.0.0')
