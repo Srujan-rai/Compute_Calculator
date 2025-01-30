@@ -219,11 +219,12 @@ def home_page(driver,actions):
         actions.move_to_element(div_element).click().perform()
         time.sleep(2)
 
-def handle_instance(driver,actions,no_of_instance):
+def handle_instance(driver,actions,no_of_instance,hours_per_day):
     for _ in range(6):
         actions.send_keys(Keys.TAB).perform()
         time.sleep(0.2)
-    #actions.send_keys(Keys.ENTER).perform()
+    if hours_per_day < 5 and hours_per_day > 0:
+        actions.send_keys(Keys.ENTER).perform()
     for _ in range(3):
         actions.send_keys(Keys.TAB).perform()
         time.sleep(0.2)
@@ -243,7 +244,7 @@ def handle_instance(driver,actions,no_of_instance):
 
 
 def handle_hours_per_day(driver,actions,hours_per_day):
-    if hours_per_day==0:
+    if hours_per_day==730:
         for _ in range(3):
             actions.send_keys(Keys.TAB).perform()
             time.sleep(0.2)
@@ -427,7 +428,7 @@ def handle_vcpu_and_memory(driver,actions,vCPU,ram):
     time.sleep(0.8)
     
 
-    pyautogui.write(ram, interval=0.1)
+    pyautogui.write(str(ram), interval=0.1)
     pyautogui.press("enter")
 
   
@@ -615,7 +616,7 @@ def get_on_demand_pricing( os_name, no_of_instances,hours_per_day, machine_famil
     driver.implicitly_wait(10)
     
     home_page(driver,actions)
-    handle_instance(driver,actions,no_of_instances)
+    handle_instance(driver,actions,no_of_instances,hours_per_day)
     handle_hours_per_day(driver,actions,hours_per_day)
     #time.sleep(0.8)
     handle_os(driver,actions,os_index,os_name)
@@ -708,7 +709,7 @@ def get_sud_pricing( os_name, no_of_instances,hours_per_day, machine_family, ser
     driver.implicitly_wait(10)
     
     home_page(driver,actions)
-    handle_instance(driver,actions,no_of_instances)
+    handle_instance(driver,actions,no_of_instances,hours_per_day)
     #time.sleep(0.8)
     handle_hours_per_day(driver,actions,hours_per_day)
     #time.sleep(0.8)
@@ -799,7 +800,7 @@ def get_one_year_pricing(os_name, no_of_instances,hours_per_day, machine_family,
     driver.implicitly_wait(10)
     
     home_page(driver,actions)
-    handle_instance(driver,actions,no_of_instances)
+    handle_instance(driver,actions,no_of_instances,hours_per_day)
     #time.sleep(0.8)
     handle_hours_per_day(driver,actions,hours_per_day)
     #time.sleep(0.8)
@@ -890,7 +891,7 @@ def  get_three_year_pricing(os_name, no_of_instances,hours_per_day, machine_fami
     driver.implicitly_wait(10)
     
     home_page(driver,actions)
-    handle_instance(driver,actions,no_of_instances)
+    handle_instance(driver,actions,no_of_instances,hours_per_day)
     #time.sleep(0.8)
     handle_hours_per_day(driver,actions,hours_per_day)
     #time.sleep(0.8)
@@ -972,7 +973,7 @@ def main(sheet_url,recipient_email):
         ram = row["RAM"] if pd.notna(row["RAM"]) else 0
         boot_disk_capacity = row["BootDisk Capacity"] if pd.notna(row["BootDisk Capacity"]) else 0
         region = row["Datacenter Location"] if pd.notna(row["Datacenter Location"]) else "Mumbai"
-        hours_per_day = int(row["Hrs/Min"]) if pd.notna(row["Hrs/Min"]) else 0
+        hours_per_day = int(row["Avg no. of hrs"]) if pd.notna(row["Avg no. of hrs"]) else 730
         print(hours_per_day)
         
         '''if hours_per_day <730:
