@@ -677,7 +677,7 @@ def get_on_demand_pricing( os_name, no_of_instances,hours_per_day, machine_famil
                 print(f"Calling handle_vcpu_and_memory Machine Family: {machine_family}, Series: {series}, Type: {machine_type}")
                 
                 if machine_type=='custom':
-                    extended_mem_toggle_on(driver,actions)
+                    #extended_mem_toggle_on(driver,actions)
                     handle_vcpu_and_memory(driver, actions, vCPU, ram)
                 else:
                     handle_vcpu_and_memory(driver, actions, vCPU, ram)
@@ -686,7 +686,7 @@ def get_on_demand_pricing( os_name, no_of_instances,hours_per_day, machine_famil
         elif machine_family.lower() == "accelerator optimized" and series == "G2":
                 print(f"Calling handle_vcpu_and_memory  Machine Family: {machine_family}, Series: {series}")
                 if machine_type=='custom':
-                    extended_mem_toggle_on(driver,actions)
+                    #extended_mem_toggle_on(driver,actions)
                     handle_vcpu_and_memory(driver, actions, vCPU, ram)
                 else:
                     handle_vcpu_and_memory(driver, actions, vCPU, ram)
@@ -778,7 +778,7 @@ def get_sud_pricing( os_name, no_of_instances,hours_per_day, machine_family, ser
                 print(f"Calling handle_vcpu_and_memory Machine Family: {machine_family}, Series: {series}, Type: {machine_type}")
                 
                 if machine_type=='custom':
-                    extended_mem_toggle_on(driver,actions)
+                    #extended_mem_toggle_on(driver,actions)
                     handle_vcpu_and_memory(driver, actions, vCPU, ram)
                 else:
                     handle_vcpu_and_memory(driver, actions, vCPU, ram)
@@ -787,7 +787,7 @@ def get_sud_pricing( os_name, no_of_instances,hours_per_day, machine_family, ser
         elif machine_family.lower() == "accelerator optimized" and series == "G2":
                 print(f"Calling handle_vcpu_and_memory  Machine Family: {machine_family}, Series: {series}")
                 if machine_type=='custom':
-                    extended_mem_toggle_on(driver,actions)
+                    #extended_mem_toggle_on(driver,actions)
                     handle_vcpu_and_memory(driver, actions, vCPU, ram)
                 else:
                     handle_vcpu_and_memory(driver, actions, vCPU, ram)
@@ -876,7 +876,7 @@ def get_one_year_pricing(os_name, no_of_instances,hours_per_day, machine_family,
                 print(f"Calling handle_vcpu_and_memory Machine Family: {machine_family}, Series: {series}, Type: {machine_type}")
                 
                 if machine_type=='custom':
-                    extended_mem_toggle_on(driver,actions)
+                    #extended_mem_toggle_on(driver,actions)
                     handle_vcpu_and_memory(driver, actions, vCPU, ram)
                 else:
                     handle_vcpu_and_memory(driver, actions, vCPU, ram)
@@ -885,7 +885,7 @@ def get_one_year_pricing(os_name, no_of_instances,hours_per_day, machine_family,
         elif machine_family.lower() == "accelerator optimized" and series == "G2":
                 print(f"Calling handle_vcpu_and_memory  Machine Family: {machine_family}, Series: {series}")
                 if machine_type=='custom':
-                    extended_mem_toggle_on(driver,actions)
+                    #extended_mem_toggle_on(driver,actions)
                     handle_vcpu_and_memory(driver, actions, vCPU, ram)
                 else:
                     handle_vcpu_and_memory(driver, actions, vCPU, ram)
@@ -974,7 +974,7 @@ def  get_three_year_pricing(os_name, no_of_instances,hours_per_day, machine_fami
                 print(f"Calling handle_vcpu_and_memory Machine Family: {machine_family}, Series: {series}, Type: {machine_type}")
                 
                 if machine_type=='custom':
-                    extended_mem_toggle_on(driver,actions)
+                    #extended_mem_toggle_on(driver,actions)
                     handle_vcpu_and_memory(driver, actions, vCPU, ram)
                 else:
                     handle_vcpu_and_memory(driver, actions, vCPU, ram)
@@ -983,7 +983,7 @@ def  get_three_year_pricing(os_name, no_of_instances,hours_per_day, machine_fami
         elif machine_family.lower() == "accelerator optimized" and series == "G2":
                 print(f"Calling handle_vcpu_and_memory  Machine Family: {machine_family}, Series: {series}")
                 if machine_type=='custom':
-                    extended_mem_toggle_on(driver,actions)
+                    #extended_mem_toggle_on(driver,actions)
                     handle_vcpu_and_memory(driver, actions, vCPU, ram)
                 else:
                     handle_vcpu_and_memory(driver, actions, vCPU, ram)
