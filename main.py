@@ -229,7 +229,7 @@ def handle_instance(driver,actions,no_of_instance,hours_per_day):
         actions.send_keys(Keys.TAB).perform()
         time.sleep(0.2)
     no_of_instance=float(no_of_instance)
-    formatted_number=f"{no_of_instance:.1f}"
+    formatted_number=f"{no_of_instance:.2f}"
     print(formatted_number)
     #pyautogui.write(formatted_number, interval=0.8)  # Adds a slight delay for accuracy
     actions.send_keys(formatted_number).perform()
