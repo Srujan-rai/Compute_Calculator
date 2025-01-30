@@ -1009,16 +1009,25 @@ def main(sheet_url,recipient_email):
                         )
 
                     if iteration==1:
-                        print(f"Iteration {iteration + 1}: Getting sustained use discount (SUD) price and link")
-                        row_result["SUD URL"], row_result["SUD Price"] = get_sud_pricing(
-                            os_name, no_of_instances, hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region
-                        )
+                        if series=="E2":
+                            print(f"Iteration {iteration + 1}: Getting sustained use discount (SUD) price and link")
+                            row_result["SUD URL"], row_result["SUD Price"] = row_result["On-Demand URL"], row_result["On-Demand Price"]
+                            
+                            
+                            
+                        else:
+                            print(f"Iteration {iteration + 1}: Getting sustained use discount (SUD) price and link")
+                            row_result["SUD URL"], row_result["SUD Price"] = get_sud_pricing(
+                                os_name, no_of_instances, hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region
+                            )
                         
                         row_result["1-Year URL"], row_result["1-Year Price"] = row_result["SUD URL"], row_result["SUD Price"]
                         row_result["3-Year URL"], row_result["3-Year Price"] = row_result["SUD URL"], row_result["SUD Price"]
                         break
                     
                 
+                    
+                    
                 
                 else:
                     if iteration == 0:
@@ -1027,10 +1036,17 @@ def main(sheet_url,recipient_email):
                             os_name, no_of_instances, hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region
                         )
                     elif iteration == 1:
-                        print(f"Iteration {iteration + 1}: Getting sustained use discount (SUD) price and link")
-                        row_result["SUD URL"], row_result["SUD Price"] = get_sud_pricing(
-                            os_name, no_of_instances, hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region
-                        )
+                        if series=="E2":
+                            print(f"Iteration {iteration + 1}: Getting sustained use discount (SUD) price and link")
+                            row_result["SUD URL"], row_result["SUD Price"] = row_result["On-Demand URL"], row_result["On-Demand Price"] 
+                            
+                            
+                        
+                        else:
+                            print(f"Iteration {iteration + 1}: Getting sustained use discount (SUD) price and link")
+                            row_result["SUD URL"], row_result["SUD Price"] = get_sud_pricing(
+                                os_name, no_of_instances, hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region
+                            )
                     elif iteration == 2:
                         print(f"Iteration {iteration + 1}: Getting 1-year commitment price and link")
                         row_result["1-Year URL"], row_result["1-Year Price"] = get_one_year_pricing(
