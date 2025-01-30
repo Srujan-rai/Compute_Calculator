@@ -225,14 +225,21 @@ def handle_instance(driver,actions,no_of_instance,hours_per_day):
         time.sleep(0.2)
     if hours_per_day < 5 and hours_per_day > 0:
         actions.send_keys(Keys.ENTER).perform()
+        hours_status=True
     for _ in range(3):
         actions.send_keys(Keys.TAB).perform()
         time.sleep(0.2)
-    no_of_instance=float(no_of_instance)
-    formatted_number=f"{no_of_instance:.2f}"
-    print(formatted_number)
-    #pyautogui.write(formatted_number, interval=0.8)  # Adds a slight delay for accuracy
-    actions.send_keys(formatted_number).perform()
+    if hours_status:
+        no_of_instance=int(no_of_instance)
+        print(formatted_number)
+        #pyautogui.write(formatted_number, interval=0.8)  # Adds a slight delay for accuracy
+        actions.send_keys(formatted_number).perform()
+    else:
+        no_of_instance=float(no_of_instance)
+        formatted_number=f"{no_of_instance:.2f}"
+        print(formatted_number)
+        #pyautogui.write(formatted_number, interval=0.8)  # Adds a slight delay for accuracy
+        actions.send_keys(formatted_number).perform()
     
         
         
