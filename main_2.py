@@ -19,11 +19,16 @@ import json
 import smtplib
 from email.message import EmailMessage
 import requests
-from flask import Flask, request,jsonify
-import pyperclip
-app=Flask(__name__)
+from flask import Flask, request
+from flask_socketio import SocketIO, emit
+from flask_cors import CORS
 
-process_status = {}
+app=Flask(__name__)
+CORS(app)
+
+socketio = SocketIO(app, cors_allowed_origins="*")
+
+
 
 
 index_file = "index.json"
@@ -65,6 +70,12 @@ os_mapping = {
 }
 
 
+
+def send_log(message):
+    print(message)  # Also print to console
+    socketio.emit('log', {'log': message})
+
+
 def extract_sheet_id(sheet_url):
     pattern = r"https://docs\.google\.com/spreadsheets/d/([a-zA-Z0-9-_]+)"
     match = re.search(pattern, sheet_url)
@@ -74,33 +85,26 @@ def extract_sheet_id(sheet_url):
         raise ValueError("Invalid Google Sheet URL")
 
 def download_sheet(sheet_url):
-        try:
-            print("downloading the sheet !!")
-            sheet_id = extract_sheet_id(sheet_url)
-            csv_url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=csv"
-            response = requests.get(csv_url)
-
-            if response.status_code == 200:
-                with open("sheet.csv", "wb") as f:
-                    f.write(response.content)
-                print("Google Sheet downloaded as sheet.csv")
-                row_count = count_rows(file_path)
-            else:
-                print("Failed to download sheet. HTTP Status Code:", response.status_code)
-        except ValueError as e:
-            print(e)
-        except Exception as e:
-            print("An error occurred:", e)
-
-
-def count_rows(file_path):
     try:
-        with open(file_path, "r", encoding="utf-8") as f:
-            reader = csv.reader(f)
-            return sum(1 for _ in reader) - 1  # Exclude header row
+        print("downloading the sheet !!")
+        sheet_id = extract_sheet_id(sheet_url)
+        csv_url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=csv"
+        response = requests.get(csv_url)
+
+        if response.status_code == 200:
+            with open("sheet.csv", "wb") as f:
+                f.write(response.content)
+            print("Google Sheet downloaded as sheet.csv")
+            send_log("Google Sheet downloaded as sheet.csv")
+        else:
+            print("Failed to download sheet. HTTP Status Code:", response.status_code)
+            send_log("Failed to download sheet. HTTP Status Code:")
+    except ValueError as e:
+        print(e)
     except Exception as e:
-        print("Error counting rows:", e)
-        return 0
+        print("An error occurred:", e)
+
+
 
 
 def send_email_with_attachment(sender_email, sender_password, recipient_email, subject, body, file_path):
@@ -123,8 +127,10 @@ def send_email_with_attachment(sender_email, sender_password, recipient_email, s
             smtp.login(sender_email, sender_password)
             smtp.send_message(msg)
         print("Email sent successfully.")
+        send_log("Email sent successfully.")
     except Exception as e:
         print(f"Failed to send email: {e}")
+        send_log(f"Failed to send email: {e}")
 
 
 def map_os(value, os_mapping):
@@ -165,6 +171,7 @@ def process_csv(input_file, output_file):
     
     df.to_csv(output_file, index=False)
     print("input file filtered")
+    send_log("input file filtered")
 
 
 
@@ -228,6 +235,7 @@ def home_page(driver,actions):
         actions.move_to_element(div_element).click().perform()
         time.sleep(2)
         print("✅ home page done")
+        send_log("✅ home page done")
 
 def handle_instance(driver,actions,no_of_instance,hours_per_day):
     hours_status=False
@@ -260,7 +268,9 @@ def handle_instance(driver,actions,no_of_instance,hours_per_day):
     for _ in range(4):
         actions.send_keys(Keys.TAB).perform()
         time.sleep(0.2)
-    print("Instance handled")
+    print("✅ Instance handled")
+    send_log("✅ Instance handled")
+    
 
 
 def handle_hours_per_day(driver,actions,hours_per_day):
@@ -269,6 +279,7 @@ def handle_hours_per_day(driver,actions,hours_per_day):
             actions.send_keys(Keys.TAB).perform()
             time.sleep(0.2)
         print("✅ default hours handled")
+        send_log("✅ default hours handled")
         pass
         
     else:
@@ -278,6 +289,7 @@ def handle_hours_per_day(driver,actions,hours_per_day):
             actions.send_keys(Keys.TAB).perform()
             time.sleep(0.2)
         print("✅ Hours handled")
+        send_log("✅ Hours handled")
 
 
 def handle_os(driver,actions,os_index,os_name):
@@ -305,6 +317,7 @@ def handle_os(driver,actions,os_index,os_name):
    
     
     print("✅ os selected")
+    send_log("✅ os selected")
     
     
     
@@ -333,6 +346,7 @@ def handle_machine_family(driver,actions,machine_family_index,machine_family):
    
     
     print("✅ machine family selected")
+    send_log("✅ machine family selected")
 
 
 def handle_series(driver,actions,series_index,series):
@@ -352,6 +366,7 @@ def handle_series(driver,actions,series_index,series):
     time.sleep(0.8)
     actions.send_keys(Keys.TAB).perform()
     print("✅ machine series selected")
+    send_log("✅ machine series selected")
     
     
 def handle_machine_type(driver,actions,machine_type,machine_type_index):
@@ -372,6 +387,7 @@ def handle_machine_type(driver,actions,machine_type,machine_type_index):
    
     
     print("✅ machine type selected")
+    send_log("✅ machine type selected")
     
 def extended_mem_toggle_on(driver,actions):
     time.sleep(0.8)
@@ -388,6 +404,7 @@ def extended_mem_toggle_on(driver,actions):
     time.sleep(0.8)
     actions.send_keys(Keys.ENTER).perform()
     print("✅ extension toggle turned on")
+    send_log("✅ extension toggle turned on")
     
     
        
@@ -456,6 +473,7 @@ def handle_vcpu_and_memory(driver,actions,vCPU,ram):
 
   
     print("✅ vpcu and ram selected")
+    send_log("✅ vpcu and ram selected")
     
     
   
@@ -473,6 +491,7 @@ def boot_disk_type(driver,actions):
     actions.send_keys(Keys.TAB).perform()   
     
     print("✅ Boot Disk Type handled")
+    send_log("✅ Boot Disk Type handled")
 
 def boot_disk_capacitys(driver,actions,boot_disk_capacity):
     time.sleep(0.8)
@@ -499,6 +518,7 @@ def boot_disk_capacitys(driver,actions,boot_disk_capacity):
     actions.send_keys(Keys.TAB).perform()
     actions.send_keys(Keys.TAB).perform()
     print("✅ boot disk capacity entered")
+    send_log("✅ boot disk capacity entered")
    
 
 
@@ -527,6 +547,7 @@ def select_region(driver, actions, region):
    
     
     print("✅ Region selected")
+    send_log("✅ Region selected")
 
 
 def get_price_with_js(driver):
@@ -540,12 +561,15 @@ def get_price_with_js(driver):
         
         if price_text and price_text.startswith("$"):
             print("✅ price extracted")
+            send_log("✅ price extracted")
             return price_text
         elif price_text:
             print("❌ Invalid price format")
+            send_log("❌ Invalid price format")
             return "Invalid price format"
         else:
             print("❌ Price element not found")
+            send_log("❌ Price element not found")
             return "Price element not found"
     
     except JavascriptException as e:
@@ -571,6 +595,7 @@ def sud_toggle_on(driver,actions):
     time.sleep(0.8)
     actions.send_keys(Keys.ENTER).perform()
     print("✅ Sud turned on")
+    send_log("✅ Sud turned on")
 
 def one_year_selection(driver,actions):
     time.sleep(0.8)
@@ -589,6 +614,7 @@ def one_year_selection(driver,actions):
     actions.send_keys(Keys.ARROW_RIGHT).perform()
     actions.send_keys(Keys.ENTER).perform()
     print("✅ one year selected")
+    send_log("✅ one year selected")
 
 
 
@@ -613,6 +639,7 @@ def three_year_selection(driver,actions):
     time.sleep(0.2)
     actions.send_keys(Keys.ENTER).perform()
     print("✅ three year selected")
+    send_log("✅ three year selected")
  
  
 def handle_machine_class(driver,actions,machine_class): 
@@ -633,8 +660,11 @@ def handle_machine_class(driver,actions,machine_class):
         actions.send_keys(Keys.ARROW_RIGHT).perform()
         actions.send_keys(Keys.ENTER).perform()
         print("✅ machine class handled preemptible selected")
+        send_log("✅ three year selected")
     else:
         print("✅ machine class handled regular selected")
+        send_log("✅ machine class handled regular selected")
+        
         pass
 
     
@@ -642,6 +672,10 @@ def handle_machine_class(driver,actions,machine_class):
 #=============================================================================================#
 def get_on_demand_pricing( os_name, no_of_instances,hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region,machine_class):
     print(f"Getting on demand pricing: 🖥️ OS: {os_name}, 🔢 No. of Instances: {no_of_instances}, ⏳ Hours per Day: {hours_per_day}, "
+      f"🛠️ Machine Family: {machine_family}, 📊 Series: {series}, 💻 Machine Type: {machine_type}, "
+      f"⚙️ vCPU: {vCPU}, 🖥️ RAM: {ram} GB, 💾 Boot Disk Capacity: {boot_disk_capacity} GB, "
+      f"🌍 Region: {region}, 🏷️ Machine Class: {machine_class}")
+    send_log(f"Getting on demand pricing: 🖥️ OS: {os_name}, 🔢 No. of Instances: {no_of_instances}, ⏳ Hours per Day: {hours_per_day}, "
       f"🛠️ Machine Family: {machine_family}, 📊 Series: {series}, 💻 Machine Type: {machine_type}, "
       f"⚙️ vCPU: {vCPU}, 🖥️ RAM: {ram} GB, 💾 Boot Disk Capacity: {boot_disk_capacity} GB, "
       f"🌍 Region: {region}, 🏷️ Machine Class: {machine_class}")
@@ -731,6 +765,7 @@ def get_on_demand_pricing( os_name, no_of_instances,hours_per_day, machine_famil
     
     driver.quit()
     print("✅ ondemand pricing done")
+    send_log("✅ ondemand pricing done")
     
     return current_url, price
     
@@ -741,6 +776,10 @@ def get_on_demand_pricing( os_name, no_of_instances,hours_per_day, machine_famil
     
 def get_sud_pricing( os_name, no_of_instances,hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region,machine_class):
     print(f"Getting SUD pricing: 🖥️ OS: {os_name}, 🔢 No. of Instances: {no_of_instances}, ⏳ Hours per Day: {hours_per_day}, "
+      f"🛠️ Machine Family: {machine_family}, 📊 Series: {series}, 💻 Machine Type: {machine_type}, "
+      f"⚙️ vCPU: {vCPU}, 🖥️ RAM: {ram} GB, 💾 Boot Disk Capacity: {boot_disk_capacity} GB, "
+      f"🌍 Region: {region}, 🏷️ Machine Class: {machine_class}")
+    send_log(f"Getting SUD pricing: 🖥️ OS: {os_name}, 🔢 No. of Instances: {no_of_instances}, ⏳ Hours per Day: {hours_per_day}, "
       f"🛠️ Machine Family: {machine_family}, 📊 Series: {series}, 💻 Machine Type: {machine_type}, "
       f"⚙️ vCPU: {vCPU}, 🖥️ RAM: {ram} GB, 💾 Boot Disk Capacity: {boot_disk_capacity} GB, "
       f"🌍 Region: {region}, 🏷️ Machine Class: {machine_class}")
@@ -833,12 +872,18 @@ def get_sud_pricing( os_name, no_of_instances,hours_per_day, machine_family, ser
     
     driver.quit()
     print("✅ sud pricing done")
+    send_log("✅ sud pricing done")
     
     return current_url, price   
     
     
 def get_one_year_pricing(os_name, no_of_instances,hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region,machine_class):
     print(f"Getting one year pricing: 🖥️ OS: {os_name}, 🔢 No. of Instances: {no_of_instances}, ⏳ Hours per Day: {hours_per_day}, "
+      f"🛠️ Machine Family: {machine_family}, 📊 Series: {series}, 💻 Machine Type: {machine_type}, "
+      f"⚙️ vCPU: {vCPU}, 🖥️ RAM: {ram} GB, 💾 Boot Disk Capacity: {boot_disk_capacity} GB, "
+      f"🌍 Region: {region}, 🏷️ Machine Class: {machine_class}")
+    
+    send_log(f"Getting one year pricing: 🖥️ OS: {os_name}, 🔢 No. of Instances: {no_of_instances}, ⏳ Hours per Day: {hours_per_day}, "
       f"🛠️ Machine Family: {machine_family}, 📊 Series: {series}, 💻 Machine Type: {machine_type}, "
       f"⚙️ vCPU: {vCPU}, 🖥️ RAM: {ram} GB, 💾 Boot Disk Capacity: {boot_disk_capacity} GB, "
       f"🌍 Region: {region}, 🏷️ Machine Class: {machine_class}")
@@ -932,6 +977,8 @@ def get_one_year_pricing(os_name, no_of_instances,hours_per_day, machine_family,
     
     driver.quit()
     print("✅ one year pricing done")
+    send_log("✅ one year pricing done")
+    
     
     return current_url, price
 
@@ -941,6 +988,11 @@ def  get_three_year_pricing(os_name, no_of_instances,hours_per_day, machine_fami
       f"⚙️ vCPU: {vCPU}, 🖥️ RAM: {ram} GB, 💾 Boot Disk Capacity: {boot_disk_capacity} GB, "
       f"🌍 Region: {region}, 🏷️ Machine Class: {machine_class}")
 
+    send_log(f"Getting three year pricing: 🖥️ OS: {os_name}, 🔢 No. of Instances: {no_of_instances}, ⏳ Hours per Day: {hours_per_day}, "
+      f"🛠️ Machine Family: {machine_family}, 📊 Series: {series}, 💻 Machine Type: {machine_type}, "
+      f"⚙️ vCPU: {vCPU}, 🖥️ RAM: {ram} GB, 💾 Boot Disk Capacity: {boot_disk_capacity} GB, "
+      f"🌍 Region: {region}, 🏷️ Machine Class: {machine_class}")
+    
     os_index = get_os_index(os_name)
     machine_family_index = get_index(machine_family, indices)
     series_index = get_index(series, indices)
@@ -1031,6 +1083,8 @@ def  get_three_year_pricing(os_name, no_of_instances,hours_per_day, machine_fami
     driver.quit()
     
     print("✅ three year pricing done")
+    send_log("✅ three year pricing done")
+    
     
     return current_url, price
 
@@ -1088,6 +1142,7 @@ def main(sheet_url,recipient_email):
                 if hours_per_day < 730 or machine_class=="preemptible":
                     if iteration==0:
                         print(f"Iteration {iteration + 1}: Getting on-demand price and link (e2-micro)")
+                        send_log(f"Iteration {iteration + 1}: Getting on-demand price and link (e2-micro)")
                         row_result["On-Demand URL"], row_result["On-Demand Price"] = get_on_demand_pricing(
                             os_name, no_of_instances, hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region,machine_class
                         )
@@ -1095,12 +1150,14 @@ def main(sheet_url,recipient_email):
                     if iteration==1:
                         if series=="E2":
                             print(f"Iteration {iteration + 1}: Getting sustained use discount (SUD) price and link")
+                            send_log(f"Iteration {iteration + 1}: Getting sustained use discount (SUD) price and link")
                             row_result["SUD URL"], row_result["SUD Price"] = row_result["On-Demand URL"], row_result["On-Demand Price"]
                             
                             
                             
                         else:
                             print(f"Iteration {iteration + 1}: Getting sustained use discount (SUD) price and link")
+                            send_log(f"Iteration {iteration + 1}: Getting sustained use discount (SUD) price and link")
                             row_result["SUD URL"], row_result["SUD Price"] = get_sud_pricing(
                                 os_name, no_of_instances, hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region,machine_class
                             )
@@ -1116,33 +1173,39 @@ def main(sheet_url,recipient_email):
                 else:
                     if iteration == 0:
                         print(f"Iteration {iteration + 1}: Getting on-demand price and link")
+                        send_log(f"Iteration {iteration + 1}: Getting on-demand price and link")
                         row_result["On-Demand URL"], row_result["On-Demand Price"] = get_on_demand_pricing(
                             os_name, no_of_instances, hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region,machine_class
                         )
                     elif iteration == 1:
                         if series=="E2":
                             print(f"Iteration {iteration + 1}: Getting sustained use discount (SUD) price and link")
+                            send_log(f"Iteration {iteration + 1}: Getting sustained use discount (SUD) price and link")
                             row_result["SUD URL"], row_result["SUD Price"] = row_result["On-Demand URL"], row_result["On-Demand Price"] 
                             
                             
                         
                         else:
                             print(f"Iteration {iteration + 1}: Getting sustained use discount (SUD) price and link")
+                            send_log(f"Iteration {iteration + 1}: Getting sustained use discount (SUD) price and link")
                             row_result["SUD URL"], row_result["SUD Price"] = get_sud_pricing(
                                 os_name, no_of_instances, hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region,machine_class
                             )
                     elif iteration == 2:
                         print(f"Iteration {iteration + 1}: Getting 1-year commitment price and link")
+                        send_log(f"Iteration {iteration + 1}: Getting 1-year commitment price and link")
                         row_result["1-Year URL"], row_result["1-Year Price"] = get_one_year_pricing(
                             os_name, no_of_instances, hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region,machine_class
                         )
                     elif iteration == 3:
                         print(f"Iteration {iteration + 1}: Getting 3-year commitment price and link")
+                        send_log(f"Iteration {iteration + 1}: Getting 3-year commitment price and link")
                         row_result["3-Year URL"], row_result["3-Year Price"] = get_three_year_pricing(
                             os_name, no_of_instances, hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region,machine_class
                         )
             except Exception as e:
                 print(f"Error processing row {index + 1}, iteration {iteration + 1}: {e}")
+                send_log(f"Error processing row {index + 1}, iteration {iteration + 1}: {e}")
                 if iteration == 0:
                     row_result["On-Demand URL"] = "Error"
                     row_result["On-Demand Price"] = "Error"
@@ -1166,7 +1229,9 @@ def main(sheet_url,recipient_email):
     output_df = pd.DataFrame(results)
     output_df.to_excel(output_file, index=False)
     print(f"Results saved to {output_file}")
+    send_log(f"Results saved to {output_file}")
     print("sending mail!!")
+    send_log("sending mail!!")
     send_email_with_attachment(sender_email, sender_password, recipient_email, subject, body, file_path)
 
 
@@ -1174,19 +1239,11 @@ def main(sheet_url,recipient_email):
 def run_automation():
     sheet = request.form.get('sheet')
     email = request.form.get('email')
-    process_status[email] = "Processing"
+    send_log("sheet email received!!")
     main(sheet,email)
-    process_status[email] = "Completed"
     return "process completed sucessfully"
-
-@app.route('/status', methods=["GET"])
-def check_status():
-    email = request.args.get('email')
-    status = process_status.get(email, "Not Found")
-    return jsonify({"status": status})
-
-
+    
 
 if __name__ == "__main__":
     
-    app.run(debug=True,use_reloader=False,host='0.0.0.0')
+    socketio.run(app, debug=True, host='0.0.0.0')

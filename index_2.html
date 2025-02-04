@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compute Calculator</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+    }
+
+    .container {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      padding: 2rem;
+      width: 100%;
+      max-width: 400px;
+      animation: fadeIn 1s ease-in-out;
+      text-align: center;
+    }
+
+    .container h1 {
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      color: #333;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      color: #555;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .form-group input:focus {
+      border-color: #6a11cb;
+      outline: none;
+      box-shadow: 0 0 8px rgba(106, 17, 203, 0.3);
+    }
+
+    .calculate-btn {
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 1rem;
+      font-weight: bold;
+      color: #fff;
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .calculate-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    .calculate-btn:hover:not(:disabled) {
+      background: linear-gradient(135deg, #2575fc, #6a11cb);
+    }
+
+    .status {
+      margin-top: 1rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #333;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Submit Your Details</h1>
+    <form id="calculate-form">
+      
+      <div class="form-group">
+        <label for="sheet">Sheet Link</label>
+        <input type="url" id="sheet" name="sheet" placeholder="Enter your sheet link" required />
+      </div>
+      <div class="form-group">
+        <label for="email">Email ID</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email" required />
+      </div>
+      <button type="submit" class="calculate-btn" id="calculate-btn">Calculate</button>
+    </form>
+
+    <div class="status" id="status-message"></div>
+    <div class="status" id="countdown-timer"></div>
+  </div>
+
+  <script>
+    document.getElementById("calculate-form").addEventListener("submit", async function(event) {
+      event.preventDefault();
+
+      const sheet = document.getElementById("sheet").value;
+      const email = document.getElementById("email").value;
+      const calculateBtn = document.getElementById("calculate-btn");
+      const statusMessage = document.getElementById("status-message");
+      const countdownTimer = document.getElementById("countdown-timer");
+
+      // Disable button and reset status
+      calculateBtn.disabled = true;
+      statusMessage.innerText = "Fetching row count...";
+      countdownTimer.innerText = "";
+
+      try {
+        // Send request to backend
+        const response = await fetch("http://127.0.0.1:5000/calculate", {
+          method: "POST",
+          body: new URLSearchParams({ sheet, email }),
+          headers: { "Content-Type": "application/x-www-form-urlencoded" }
+        });
+
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || "Something went wrong");
+
+        // Get the row count
+        const rows = result.rows;
+        const estimatedTime = rows * 6 * 60; // 6 minutes per row (convert to seconds)
+
+        statusMessage.innerText = `Estimated processing time: ${Math.floor(estimatedTime / 60)} minutes`;
+
+        // Start countdown timer
+        let timeLeft = estimatedTime;
+        const interval = setInterval(() => {
+          if (timeLeft <= 0) {
+            clearInterval(interval);
+            countdownTimer.innerText = "Processing complete! Waiting for confirmation...";
+          } else {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            countdownTimer.innerText = `Time left: ${minutes}m ${seconds}s`;
+            timeLeft--;
+          }
+        }, 1000);
+
+        // Poll backend for process completion
+        const checkCompletion = async () => {
+          const statusResponse = await fetch(`http://127.0.0.1:5000/status?email=${encodeURIComponent(email)}`);
+          const statusResult = await statusResponse.json();
+
+          if (statusResult.status === "Completed") {
+            clearInterval(interval);
+            countdownTimer.innerText = "Process completed successfully!";
+            calculateBtn.disabled = false;
+          } else {
+            setTimeout(checkCompletion, 5000); // Check again in 5 seconds
+          }
+        };
+
+        checkCompletion();
+
+      } catch (error) {
+        statusMessage.innerText = `Error: ${error.message}`;
+        calculateBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

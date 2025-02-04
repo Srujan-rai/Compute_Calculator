@@ -1,11 +1,8 @@
-Srno,No. of Instances,OS with version,Machine Class,Machine Family,Series,Machine Type,vCPUs,RAM,BootDisk Type,BootDisk Capacity,Gpu no,Gpu Type,WorkStation,Datacenter Location,Avg no. of hrs,Hrs/Min,Days/Month,Zonal/Regional,HDD,SSD,Balanced SSD,Snapshot
-11,2.04,"Free: Debian, CentOS, CoreOS, Ubuntu or BYOL",preemptive,general purpose,N1,custom,4.0,8.0,,,,,,asia-south1,,,,,,,,
-12,2.04,"Free: Debian, CentOS, CoreOS, Ubuntu or BYOL",,general purpose,E2,e2-standard-2,4.0,16.0,,,,,,asia-south1,,,,,,,,
-13,1.02,"Free: Debian, CentOS, CoreOS, Ubuntu or BYOL",,general purpose,N2D,e2-standard-2,8.0,32.0,,,,,,asia-south1,,,,,,,,
-14,1.02,"Free: Debian, CentOS, CoreOS, Ubuntu or BYOL",,general purpose,N2D,e2-standard-2,8.0,32.0,,,,,,asia-south1,,,,,,,,
-15,1.02,Paid: Windows Server,,general purpose,E2,e2-standard-2,2.0,8.0,,,,,,asia-south1,,,,,,,,
-16,1.0,Paid: Windows Server,,general purpose,E2,e2-standard-2,4.0,16.0,,,,,,asia-south1,34.0,hours,month,,,,,
-17,1.02,Paid: Windows Server,,general purpose,E2,e2-standard-2,8.0,32.0,,,,,,asia-south1,,,,,,,,
-18,1.0,"Free: Debian, CentOS, CoreOS, Ubuntu or BYOL",,general purpose,E2,e2-micro,,,,,,,,europe-north1,1.0,hours,month,,,,,
-19,1.02,"Free: Debian, CentOS, CoreOS, Ubuntu or BYOL",,general purpose,E2,e2-medium,,,,,,,,us-east4,,,,,,,,
-20,2.04,"Free: Debian, CentOS, CoreOS, Ubuntu or BYOL",,general purpose,E2,e2-standard-2,2.0,8.0,,,,,,us-east4,,,,,,,,
+Srno,No. of Instances,OS with version,Machine Class,Machine Family,Series,Machine Type,vCPUs,RAM,BootDisk Type,BootDisk Capacity,Gpu no,Gpu Type,WorkStation,Datacenter Location,Avg no. of hrs,Hrs/Min,Days/Month
+22,3.7,"Free: Debian, CentOS, CoreOS, Ubuntu or BYOL",,general purpose,N1,e2-standard-2,4,15.0,,,,,,asia-south1,,,
+23,1.0,"Free: Debian, CentOS, CoreOS, Ubuntu or BYOL",,general purpose,N1,custom,4,32.0,,,,,,asia-south1,,,
+24,1.0,"Free: Debian, CentOS, CoreOS, Ubuntu or BYOL",,general purpose,N2,custom,4,32.0,,,,,,asia-south1,,,
+25,1.0,"Free: Debian, CentOS, CoreOS, Ubuntu or BYOL",,general purpose,E2,custom,4,30.5,,,,,,asia-south1,,,
+26,1.0,"Free: Debian, CentOS, CoreOS, Ubuntu or BYOL",preemptible,general purpose,N2D,custom,4,8.0,,,,,,asia-south1,128.0,hours,month
+27,1.0,"Free: Debian, CentOS, CoreOS, Ubuntu or BYOL",preemptible,general purpose,N2D,custom,4,8.0,,,,,,asia-south1,13.0,hours,month
+28,1.0,"Free: Debian, CentOS, CoreOS, Ubuntu or BYOL",preemptible,general purpose,N1,e2-standard-2,2,7.5,,,,,,asia-south1,337.0,hours,month
