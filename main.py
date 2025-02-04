@@ -487,7 +487,7 @@ def boot_disk_capacitys(driver,actions,boot_disk_capacity):
     pyautogui.hotkey('ctrl', 'f')
     time.sleep(0.8)
     
-    pyautogui.typewrite('0')
+    pyautogui.typewrite('Boot disk size')
     time.sleep(0.8)
     
     pyautogui.press('esc')
