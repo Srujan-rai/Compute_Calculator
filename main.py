@@ -416,8 +416,16 @@ def handle_vcpu_and_memory(driver,actions,vCPU,ram):
     actions.send_keys(Keys.ENTER).perform()
     time.sleep(0.8)
     actions.send_keys(Keys.BACKSPACE).perform()
-    time.sleep(0.8)
+    time.sleep(0.3)
     actions.send_keys(Keys.BACKSPACE).perform()
+    time.sleep(0.3)
+    actions.send_keys(Keys.BACKSPACE).perform()
+    time.sleep(0.3)
+    actions.send_keys(Keys.BACKSPACE).perform()
+    time.sleep(0.8)
+
+    actions.send_keys(Keys.BACKSPACE).perform()
+    
     time.sleep(0.8)
     actions.send_keys(vCPU).perform()
     time.sleep(0.8)
