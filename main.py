@@ -1179,11 +1179,6 @@ def run_automation():
     process_status[email] = "Completed"
     return "process completed sucessfully"
 
-@app.route('/status', methods=["GET"])
-def check_status():
-    email = request.args.get('email')
-    status = process_status.get(email, "Not Found")
-    return jsonify({"status": status})
 
 
 
