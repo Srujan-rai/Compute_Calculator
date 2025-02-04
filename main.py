@@ -1093,7 +1093,7 @@ def main(sheet_url,recipient_email):
                 
                 
                 
-                if hours_per_day < 730 or machine_class=="preemptible":
+                if hours_per_day < 730 or machine_class=="preemptible": #if it is less than on demand price  ///////even if it greater then 730 and (spot/premtible eny condition the price is ondemand)
                     if iteration==0:
                         print(f"Iteration {iteration + 1}: Getting on-demand price and link (e2-micro)")
                         row_result["On-Demand URL"], row_result["On-Demand Price"] = get_on_demand_pricing(
@@ -1101,17 +1101,13 @@ def main(sheet_url,recipient_email):
                         )
 
                     if iteration==1:
-                        if series=="E2":
-                            print(f"Iteration {iteration + 1}: Getting sustained use discount (SUD) price and link")
-                            row_result["SUD URL"], row_result["SUD Price"] = row_result["On-Demand URL"], row_result["On-Demand Price"]
+                        
+                        print(f"Iteration {iteration + 1}: Getting sustained use discount (SUD) price and link")
+                        row_result["SUD URL"], row_result["SUD Price"] = row_result["On-Demand URL"], row_result["On-Demand Price"]
                             
                             
                             
-                        else:
-                            print(f"Iteration {iteration + 1}: Getting sustained use discount (SUD) price and link")
-                            row_result["SUD URL"], row_result["SUD Price"] = get_sud_pricing(
-                                os_name, no_of_instances, hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region,machine_class
-                            )
+                        
                         
                         row_result["1-Year URL"], row_result["1-Year Price"] = row_result["SUD URL"], row_result["SUD Price"]
                         row_result["3-Year URL"], row_result["3-Year Price"] = row_result["SUD URL"], row_result["SUD Price"]
