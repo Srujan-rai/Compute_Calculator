@@ -695,8 +695,14 @@ def get_on_demand_pricing( os_name, no_of_instances,hours_per_day, machine_famil
     if vCPU!=0:
         if (machine_family.lower() == "general purpose" and series in ["N1", "N2", "N4", "E2", "N2D"] and not (series == "N1" and machine_type in ["f1-micro", "g1-small"])):
                 print(f"Calling handle_vcpu_and_memory Machine Family: {machine_family}, Series: {series}, Type: {machine_type}")
-                
-                if machine_type=='custom'and series=='N1' and ram >13:
+                ram_limits = {
+                'N1': 13,
+                'N2': 32,
+                'N2D': 32,
+                'N4': 16,
+                'E2': 16
+                }
+                if machine_type == 'custom' and series in ram_limits and ram > ram_limits[series]:
                     extended_mem_toggle_on(driver,actions)
                     handle_vcpu_and_memory(driver, actions, vCPU, ram)
                 else:
@@ -796,8 +802,14 @@ def get_sud_pricing( os_name, no_of_instances,hours_per_day, machine_family, ser
     if vCPU!=0:
         if (machine_family.lower() == "general purpose" and series in ["N1", "N2", "N4", "E2", "N2D"] and not (series == "N1" and machine_type in ["f1-micro", "g1-small"])):
                 print(f"Calling handle_vcpu_and_memory Machine Family: {machine_family}, Series: {series}, Type: {machine_type}")
-                
-                if machine_type=='custom'and series=='N1' and ram >13:
+                ram_limits = {
+                'N1': 13,
+                'N2': 32,
+                'N2D': 32,
+                'N4': 16,
+                'E2': 16
+                }
+                if machine_type == 'custom' and series in ram_limits and ram > ram_limits[series]:
                     extended_mem_toggle_on(driver,actions)
                     handle_vcpu_and_memory(driver, actions, vCPU, ram)
                 else:
@@ -895,7 +907,14 @@ def get_one_year_pricing(os_name, no_of_instances,hours_per_day, machine_family,
         if (machine_family.lower() == "general purpose" and series in ["N1", "N2", "N4", "E2", "N2D"] and not (series == "N1" and machine_type in ["f1-micro", "g1-small"])):
                 print(f"Calling handle_vcpu_and_memory Machine Family: {machine_family}, Series: {series}, Type: {machine_type}")
                 
-                if machine_type=='custom'and series=='N1' and ram >13:
+                ram_limits = {
+                'N1': 13,
+                'N2': 32,
+                'N2D': 32,
+                'N4': 16,
+                'E2': 16
+                }
+                if machine_type == 'custom' and series in ram_limits and ram > ram_limits[series]:
                     extended_mem_toggle_on(driver,actions)
                     handle_vcpu_and_memory(driver, actions, vCPU, ram)
                 else:
@@ -993,7 +1012,14 @@ def  get_three_year_pricing(os_name, no_of_instances,hours_per_day, machine_fami
         if (machine_family.lower() == "general purpose" and series in ["N1", "N2", "N4", "E2", "N2D"] and not (series == "N1" and machine_type in ["f1-micro", "g1-small"])):
                 print(f"Calling handle_vcpu_and_memory Machine Family: {machine_family}, Series: {series}, Type: {machine_type}")
                 
-                if machine_type=='custom'and series=='N1' and ram >13:
+                ram_limits = {
+                'N1': 13,
+                'N2': 32,
+                'N2D': 32,
+                'N4': 16,
+                'E2': 16
+                }
+                if machine_type == 'custom' and series in ram_limits and ram > ram_limits[series]:
                     extended_mem_toggle_on(driver,actions)
                     handle_vcpu_and_memory(driver, actions, vCPU, ram)
                 else:
