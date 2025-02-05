@@ -281,26 +281,26 @@ def handle_hours_per_day(driver,actions,hours_per_day):
 
 
 def handle_os(driver,actions,os_index,os_name):
-    time.sleep(0.8)
+    time.sleep(0.6)
     pyautogui.hotkey('ctrl', 'f')
-    time.sleep(0.8)
+    time.sleep(0.6)
     
     pyautogui.typewrite('Operating System / Software')
-    time.sleep(0.8)
+    time.sleep(0.6)
     
     pyautogui.press('esc')
-    time.sleep(0.8)
+    time.sleep(0.6)
     
     actions.send_keys(Keys.ENTER).perform()
-    time.sleep(0.8)
+    time.sleep(0.6)
     pyautogui.hotkey('ctrl', 'f')
-    time.sleep(0.8)
+    time.sleep(0.6)
     
     pyautogui.typewrite(os_name)
-    time.sleep(0.8)
+    time.sleep(0.6)
     
     pyautogui.press('esc')
-    time.sleep(0.8)   
+    time.sleep(0.6)   
     actions.send_keys(Keys.ENTER).perform()
    
     
@@ -309,26 +309,26 @@ def handle_os(driver,actions,os_index,os_name):
     
     
 def handle_machine_family(driver,actions,machine_family_index,machine_family):
-    time.sleep(0.8)
+    time.sleep(0.6)
     pyautogui.hotkey('ctrl', 'f')
-    time.sleep(0.8)
+    time.sleep(0.6)
     
     pyautogui.typewrite('Machine Family')
-    time.sleep(0.8)
+    time.sleep(0.6)
     
     pyautogui.press('esc')
-    time.sleep(0.8)
+    time.sleep(0.6)
     
     actions.send_keys(Keys.ENTER).perform()
-    time.sleep(0.8)
+    time.sleep(0.6)
     pyautogui.hotkey('ctrl', 'f')
-    time.sleep(0.8)
+    time.sleep(0.6)
     
     pyautogui.typewrite(machine_family)
-    time.sleep(0.8)
+    time.sleep(0.6)
     
     pyautogui.press('esc')
-    time.sleep(0.8)   
+    time.sleep(0.6)   
     actions.send_keys(Keys.ENTER).perform()
    
     
@@ -339,17 +339,17 @@ def handle_series(driver,actions,series_index,series):
     actions.send_keys(Keys.TAB).perform()
     
     actions.send_keys(Keys.ENTER).perform()
-    time.sleep(0.8)
+    time.sleep(0.6)
     pyautogui.hotkey('ctrl', 'f')
-    time.sleep(0.8)
+    time.sleep(0.6)
     
     pyautogui.typewrite(series)
-    time.sleep(0.8)
+    time.sleep(0.6)
     
     pyautogui.press('esc')
-    time.sleep(0.8)   
+    time.sleep(0.6)   
     actions.send_keys(Keys.ENTER).perform()
-    time.sleep(0.8)
+    time.sleep(0.6)
     actions.send_keys(Keys.TAB).perform()
     print("✅ machine series selected")
     
@@ -357,35 +357,35 @@ def handle_series(driver,actions,series_index,series):
 def handle_machine_type(driver,actions,machine_type,machine_type_index):
     
     
-    time.sleep(0.8)
+    time.sleep(0.6)
     actions.send_keys(Keys.ENTER).perform()
-    time.sleep(0.8)
+    time.sleep(0.6)
     pyautogui.hotkey('ctrl', 'f')
-    time.sleep(0.8)
+    time.sleep(0.6)
     
     pyautogui.typewrite(machine_type)
-    time.sleep(0.8)
+    time.sleep(0.6)
     
     pyautogui.press('esc')
-    time.sleep(0.8)   
+    time.sleep(0.6)   
     actions.send_keys(Keys.ENTER).perform()
    
     
     print("✅ machine type selected")
     
 def extended_mem_toggle_on(driver,actions):
-    time.sleep(0.8)
+    time.sleep(0.6)
     
     pyautogui.hotkey('ctrl', 'f')
-    time.sleep(0.8)
+    time.sleep(0.6)
     
     pyautogui.typewrite('Extended memory')
-    time.sleep(0.8)
+    time.sleep(0.6)
     
     pyautogui.press('esc')
-    time.sleep(0.8)
+    time.sleep(0.6)
     actions.key_down(Keys.SHIFT).send_keys(Keys.TAB).key_up(Keys.SHIFT).perform()
-    time.sleep(0.8)
+    time.sleep(0.6)
     actions.send_keys(Keys.ENTER).perform()
     print("✅ extension toggle turned on")
     
@@ -395,26 +395,26 @@ def extended_mem_toggle_on(driver,actions):
 def handle_vcpu_and_memory(driver,actions,vCPU,ram):
     print(vCPU)
     print(ram)
-    time.sleep(0.8)
+    time.sleep(0.6)
     
     pyautogui.hotkey('ctrl', 'f')
-    time.sleep(0.8)
+    time.sleep(0.6)
     
     pyautogui.typewrite('Number of vCPUs')
-    time.sleep(0.8)
+    time.sleep(0.6)
     
     pyautogui.press('esc')
-    time.sleep(0.8)
+    time.sleep(0.6)
     
     actions.send_keys(Keys.ENTER).perform()
-    time.sleep(0.8)
+    time.sleep(0.6)
     for _ in range(3):
         actions.send_keys(Keys.TAB).perform()
         time.sleep(0.2)
         
         
     actions.send_keys(Keys.ENTER).perform()
-    time.sleep(0.8)
+    time.sleep(0.6)
     actions.send_keys(Keys.BACKSPACE).perform()
     time.sleep(0.3)
     actions.send_keys(Keys.BACKSPACE).perform()
@@ -422,40 +422,40 @@ def handle_vcpu_and_memory(driver,actions,vCPU,ram):
     actions.send_keys(Keys.BACKSPACE).perform()
     time.sleep(0.3)
     actions.send_keys(Keys.BACKSPACE).perform()
-    time.sleep(0.8)
+    time.sleep(0.6)
 
     actions.send_keys(Keys.BACKSPACE).perform()
     
-    time.sleep(0.8)
+    time.sleep(0.6)
     actions.send_keys(vCPU).perform()
-    time.sleep(0.8)
+    time.sleep(0.6)
     
     pyautogui.hotkey('ctrl', 'f')
-    time.sleep(0.8)
+    time.sleep(0.6)
     
     pyautogui.typewrite('Amount of memory')
-    time.sleep(0.8)
+    time.sleep(0.6)
     
     pyautogui.press('esc')
-    time.sleep(0.8)
+    time.sleep(0.6)
     
     actions.send_keys(Keys.ENTER).perform()
     
-    time.sleep(0.8)
+    time.sleep(0.6)
     for _ in range(3):
         actions.send_keys(Keys.TAB).perform()
         time.sleep(0.2)
         
    
-    time.sleep(0.8)
+    time.sleep(0.6)
     actions.send_keys(Keys.ENTER).perform()
-    time.sleep(0.8)
+    time.sleep(0.6)
     actions.send_keys(Keys.BACKSPACE).perform()
-    time.sleep(0.8)
+    time.sleep(0.6)
     actions.send_keys(Keys.BACKSPACE).perform()
-    time.sleep(0.8)
+    time.sleep(0.6)
     actions.send_keys(Keys.BACKSPACE).perform()
-    time.sleep(0.8)
+    time.sleep(0.6)
     actions.send_keys(Keys.BACKSPACE).perform() 
     time.sleep(0.5)
 
@@ -468,14 +468,14 @@ def handle_vcpu_and_memory(driver,actions,vCPU,ram):
     
   
 def boot_disk_type(driver,actions):
-    time.sleep(0.8)
+    time.sleep(0.6)
     pyautogui.hotkey('ctrl', 'f')
-    time.sleep(0.8)
+    time.sleep(0.6)
     
     pyautogui.typewrite('Boot disk type')
-    time.sleep(0.8)
+    time.sleep(0.6)
     pyautogui.press('esc')
-    time.sleep(0.8)
+    time.sleep(0.6)
     
     actions.send_keys(Keys.TAB).perform()
     actions.send_keys(Keys.TAB).perform()   
@@ -483,15 +483,15 @@ def boot_disk_type(driver,actions):
     print("✅ Boot Disk Type handled")
 
 def boot_disk_capacitys(driver,actions,boot_disk_capacity):
-    time.sleep(0.8)
+    time.sleep(0.6)
     pyautogui.hotkey('ctrl', 'f')
-    time.sleep(0.8)
+    time.sleep(0.6)
     
     pyautogui.typewrite('Boot disk size')
-    time.sleep(0.8)
+    time.sleep(0.6)
     
     pyautogui.press('esc')
-    time.sleep(0.8)   
+    time.sleep(0.6)   
     actions.send_keys(Keys.ENTER).perform()
     for _ in range(3):
         actions.send_keys(Keys.TAB).perform()
@@ -499,11 +499,11 @@ def boot_disk_capacitys(driver,actions,boot_disk_capacity):
    
     
     actions.send_keys(Keys.ENTER).perform()
-    time.sleep(0.8)
+    time.sleep(0.6)
     actions.send_keys(Keys.BACKSPACE).perform()
-    time.sleep(0.8)
+    time.sleep(0.6)
     pyautogui.typewrite(str(boot_disk_capacity))
-    time.sleep(0.8)
+    time.sleep(0.6)
     actions.send_keys(Keys.TAB).perform()
     actions.send_keys(Keys.TAB).perform()
     print("✅ boot disk capacity entered")
@@ -511,26 +511,26 @@ def boot_disk_capacitys(driver,actions,boot_disk_capacity):
 
 
 def select_region(driver, actions, region):
-    time.sleep(0.8)
+    time.sleep(0.6)
     pyautogui.hotkey('ctrl', 'f')
-    time.sleep(0.8)
+    time.sleep(0.6)
     
     pyautogui.typewrite('Region')
-    time.sleep(0.8)
+    time.sleep(0.6)
     
     pyautogui.press('esc')
-    time.sleep(0.8)
+    time.sleep(0.6)
     
     actions.send_keys(Keys.ENTER).perform()
-    time.sleep(0.8)
+    time.sleep(0.6)
     pyautogui.hotkey('ctrl', 'f')
-    time.sleep(0.8)
+    time.sleep(0.6)
     
     pyautogui.typewrite(region)
-    time.sleep(0.8)
+    time.sleep(0.6)
     
     pyautogui.press('esc')
-    time.sleep(0.8)   
+    time.sleep(0.6)   
     actions.send_keys(Keys.ENTER).perform()
    
     
@@ -567,29 +567,29 @@ def move_to_region(driver,actions,moves):
 
 def sud_toggle_on(driver,actions):
     pyautogui.hotkey('ctrl', 'f')
-    time.sleep(0.8)
+    time.sleep(0.6)
     
     pyautogui.typewrite('Add sustained use discounts')
-    time.sleep(0.8)
+    time.sleep(0.6)
     
     pyautogui.press('esc')
-    time.sleep(0.8)
+    time.sleep(0.6)
     
     actions.key_down(Keys.SHIFT).send_keys(Keys.TAB).key_up(Keys.SHIFT).perform()
-    time.sleep(0.8)
+    time.sleep(0.6)
     actions.send_keys(Keys.ENTER).perform()
     print("✅ Sud turned on")
 
 def one_year_selection(driver,actions):
-    time.sleep(0.8)
+    time.sleep(0.6)
     pyautogui.hotkey('ctrl', 'f')
-    time.sleep(0.8)
+    time.sleep(0.6)
     
     pyautogui.typewrite('Committed use discount options')
-    time.sleep(0.8)
+    time.sleep(0.6)
     
     pyautogui.press('esc')
-    time.sleep(0.8)   
+    time.sleep(0.6)   
     
     for _ in range(2):
         actions.send_keys(Keys.TAB).perform()
@@ -602,15 +602,15 @@ def one_year_selection(driver,actions):
 
 
 def three_year_selection(driver,actions):
-    time.sleep(0.8)
+    time.sleep(0.6)
     pyautogui.hotkey('ctrl', 'f')
-    time.sleep(0.8)
+    time.sleep(0.6)
     
     pyautogui.typewrite('Committed use discount options')
-    time.sleep(0.8)
+    time.sleep(0.6)
     
     pyautogui.press('esc')
-    time.sleep(0.8)   
+    time.sleep(0.6)   
     
     for _ in range(2):
         actions.send_keys(Keys.TAB).perform()
@@ -624,15 +624,15 @@ def three_year_selection(driver,actions):
  
  
 def handle_machine_class(driver,actions,machine_class): 
-    time.sleep(0.8)
+    time.sleep(0.6)
     pyautogui.hotkey('ctrl', 'f')
-    time.sleep(0.8)
+    time.sleep(0.6)
     
     pyautogui.typewrite('Provisioning Model')
-    time.sleep(0.8)
+    time.sleep(0.6)
     
     pyautogui.press('esc')
-    time.sleep(0.8)   
+    time.sleep(0.6)   
     
     for _ in range(2):
         actions.send_keys(Keys.TAB).perform()
@@ -680,17 +680,17 @@ def get_on_demand_pricing( os_name, no_of_instances,hours_per_day, machine_famil
     home_page(driver,actions)
     handle_instance(driver,actions,no_of_instances,hours_per_day)
     handle_hours_per_day(driver,actions,hours_per_day)
-    #time.sleep(0.8)
+    #time.sleep(0.6)
     handle_machine_class(driver,actions,machine_class)
     
     handle_os(driver,actions,os_index,os_name)
-    #time.sleep(0.8)
+    #time.sleep(0.6)
     handle_machine_family(driver,actions,machine_family_index,machine_family)
-    #time.sleep(0.8)
+    #time.sleep(0.6)
     handle_series(driver,actions,series_index,series)
-    #time.sleep(0.8)
+    #time.sleep(0.6)
     handle_machine_type(driver,actions,machine_type,machine_type_index)
-    #time.sleep(0.8)
+    #time.sleep(0.6)
     
     if vCPU!=0:
         if (machine_family.lower() == "general purpose" and series in ["N1", "N2", "N4", "E2", "N2D"] and not (series == "N1" and machine_type in ["f1-micro", "g1-small"])):
@@ -715,12 +715,12 @@ def get_on_demand_pricing( os_name, no_of_instances,hours_per_day, machine_famil
     else:
         print(f"Skipping handle_vcpu_and_memory: Machine Family: {machine_family}, Series: {series}, Type: {machine_type}")
     
-    #time.sleep(0.8)
+    #time.sleep(0.6)
     boot_disk_type(driver,actions)
-    #time.sleep(0.8)
+    #time.sleep(0.6)
     boot_disk_capacitys(driver,actions,boot_disk_capacity)    
     
-    #time.sleep(0.8)
+    #time.sleep(0.6)
 
     
 
@@ -779,19 +779,19 @@ def get_sud_pricing( os_name, no_of_instances,hours_per_day, machine_family, ser
     
     home_page(driver,actions)
     handle_instance(driver,actions,no_of_instances,hours_per_day)
-    #time.sleep(0.8)
+    #time.sleep(0.6)
     handle_hours_per_day(driver,actions,hours_per_day)
-    #time.sleep(0.8)
+    #time.sleep(0.6)
     handle_machine_class(driver,actions,machine_class)
     
     handle_os(driver,actions,os_index,os_name)
-    #time.sleep(0.8)
+    #time.sleep(0.6)
     handle_machine_family(driver,actions,machine_family_index,machine_family)
-    #time.sleep(0.8)
+    #time.sleep(0.6)
     handle_series(driver,actions,series_index,series)
-    #time.sleep(0.8)
+    #time.sleep(0.6)
     handle_machine_type(driver,actions,machine_type,machine_type_index)
-    #time.sleep(0.8)
+    #time.sleep(0.6)
     
     if vCPU!=0:
         if (machine_family.lower() == "general purpose" and series in ["N1", "N2", "N4", "E2", "N2D"] and not (series == "N1" and machine_type in ["f1-micro", "g1-small"])):
@@ -816,9 +816,9 @@ def get_sud_pricing( os_name, no_of_instances,hours_per_day, machine_family, ser
     else:
         print(f"Skipping handle_vcpu_and_memory: Machine Family: {machine_family}, Series: {series}, Type: {machine_type}")
     
-    #time.sleep(0.8)
+    #time.sleep(0.6)
     boot_disk_type(driver,actions)
-    #time.sleep(0.8)
+    #time.sleep(0.6)
     boot_disk_capacitys(driver,actions,boot_disk_capacity)    
     
     #time.sleep(2)
@@ -877,19 +877,19 @@ def get_one_year_pricing(os_name, no_of_instances,hours_per_day, machine_family,
     
     home_page(driver,actions)
     handle_instance(driver,actions,no_of_instances,hours_per_day)
-    #time.sleep(0.8)
+    #time.sleep(0.6)
     handle_hours_per_day(driver,actions,hours_per_day)
-    #time.sleep(0.8)
+    #time.sleep(0.6)
     handle_machine_class(driver,actions,machine_class)
     
     handle_os(driver,actions,os_index,os_name)
-    #time.sleep(0.8)
+    #time.sleep(0.6)
     handle_machine_family(driver,actions,machine_family_index,machine_family)
-    #time.sleep(0.8)
+    #time.sleep(0.6)
     handle_series(driver,actions,series_index,series)
-    #time.sleep(0.8)
+    #time.sleep(0.6)
     handle_machine_type(driver,actions,machine_type,machine_type_index)
-    #time.sleep(0.8)
+    #time.sleep(0.6)
     
     if vCPU!=0:
         if (machine_family.lower() == "general purpose" and series in ["N1", "N2", "N4", "E2", "N2D"] and not (series == "N1" and machine_type in ["f1-micro", "g1-small"])):
@@ -914,18 +914,18 @@ def get_one_year_pricing(os_name, no_of_instances,hours_per_day, machine_family,
         else:
             print(f"Skipping handle_vcpu_and_memory: Machine Family: {machine_family}, Series: {series}, Type: {machine_type}")
     
-    #time.sleep(0.8)
+    #time.sleep(0.6)
     boot_disk_type(driver,actions)
-    #time.sleep(0.8)
+    #time.sleep(0.6)
     boot_disk_capacitys(driver,actions,boot_disk_capacity)    
     
-    #time.sleep(0.8)
+    #time.sleep(0.6)
 
     
 
     select_region(driver,actions,region)
     
-    #time.sleep(0.8)
+    #time.sleep(0.6)
     
     one_year_selection(driver,actions)  
         
@@ -975,19 +975,19 @@ def  get_three_year_pricing(os_name, no_of_instances,hours_per_day, machine_fami
     
     home_page(driver,actions)
     handle_instance(driver,actions,no_of_instances,hours_per_day)
-    #time.sleep(0.8)
+    #time.sleep(0.6)
     handle_hours_per_day(driver,actions,hours_per_day)
     
     handle_machine_class(driver,actions,machine_class)
-    #time.sleep(0.8)
+    #time.sleep(0.6)
     handle_os(driver,actions,os_index,os_name)
-    #time.sleep(0.8)
+    #time.sleep(0.6)
     handle_machine_family(driver,actions,machine_family_index,machine_family)
-    #time.sleep(0.8)
+    #time.sleep(0.6)
     handle_series(driver,actions,series_index,series)
-    #time.sleep(0.8)
+    #time.sleep(0.6)
     handle_machine_type(driver,actions,machine_type,machine_type_index)
-    #time.sleep(0.8)
+    #time.sleep(0.6)
     
     if vCPU!=0:
         if (machine_family.lower() == "general purpose" and series in ["N1", "N2", "N4", "E2", "N2D"] and not (series == "N1" and machine_type in ["f1-micro", "g1-small"])):
@@ -1015,16 +1015,16 @@ def  get_three_year_pricing(os_name, no_of_instances,hours_per_day, machine_fami
     else:
         print(f"Skipping handle_vcpu_and_memory: Machine Family: {machine_family}, Series: {series}, Type: {machine_type}")
     
-    #time.sleep(0.8)
+    #time.sleep(0.6)
     boot_disk_type(driver,actions)
-    #time.sleep(0.8)
+    #time.sleep(0.6)
     boot_disk_capacitys(driver,actions,boot_disk_capacity)    
     
-    #time.sleep(0.8)
+    #time.sleep(0.6)
     
     select_region(driver,actions,region)
     
-    #time.sleep(0.8)
+    #time.sleep(0.6)
     
     three_year_selection(driver,actions)
     
@@ -1093,7 +1093,7 @@ def main(sheet_url,recipient_email):
                 
                 
                 
-                if hours_per_day < 730 or machine_class=="preemptible": #if it is less than on demand price  ///////even if it greater then 730 and (spot/premtible eny condition the price is ondemand)
+                if  machine_class=="preemptible": #if it is less than on demand price  ///////even if it greater then 730 and (spot/premtible eny condition the price is ondemand)
                     if iteration==0:
                         print(f"Iteration {iteration + 1}: Getting on-demand price and link (e2-micro)")
                         row_result["On-Demand URL"], row_result["On-Demand Price"] = get_on_demand_pricing(
@@ -1113,6 +1113,27 @@ def main(sheet_url,recipient_email):
                         row_result["3-Year URL"], row_result["3-Year Price"] = row_result["SUD URL"], row_result["SUD Price"]
                         break
                     
+                if  machine_class=="regular" and hours_per_day < 730:
+                    if iteration==0:
+                        print(f"Iteration {iteration + 1}: Getting on-demand price and link (e2-micro)")
+                        row_result["On-Demand URL"], row_result["On-Demand Price"] = get_on_demand_pricing(
+                            os_name, no_of_instances, hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region,machine_class
+                        )
+
+                    if iteration==1:
+                        
+                        print(f"Iteration {iteration + 1}: Getting sustained use discount (SUD) price and link")
+                        row_result["SUD URL"], row_result["SUD Price"] = get_sud_pricing(
+                            os_name, no_of_instances, hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region,machine_class
+                        )
+                            
+                            
+                            
+                        
+                        
+                        row_result["1-Year URL"], row_result["1-Year Price"] = row_result["SUD URL"], row_result["SUD Price"]
+                        row_result["3-Year URL"], row_result["3-Year Price"] = row_result["SUD URL"], row_result["SUD Price"]
+                        break
                 
                     
                     
