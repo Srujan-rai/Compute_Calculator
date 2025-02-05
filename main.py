@@ -55,6 +55,8 @@ os_mapping = {
     r"ubuntu": "Free: Debian, CentOS, CoreOS, Ubuntu or BYOL",
     r"debian": "Free: Debian, CentOS, CoreOS, Ubuntu or BYOL",
     r"sql": "Paid: SQL Server Standard",
+    r"sql-web": "Paid: SQL Server Web",
+    r"sql-enterprise": "Paid: SQL Server Enterprise",
     r"free": "Free: Debian, CentOS, CoreOS, Ubuntu or BYOL",
     r"sles(\s*12)?": "Paid: SLES 12 for SAP",
     r"sles(\s*15)?": "Paid: SLES 15 for SAP",
@@ -63,6 +65,7 @@ os_mapping = {
     r"rhel\s*sap": "Paid: Red Hat Enterprise Linux for SAP with HA and Update Services",
     r"sles": "Paid: SLES"
 }
+
 
 
 def extract_sheet_id(sheet_url):
