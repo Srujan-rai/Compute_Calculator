@@ -1,46 +1,51 @@
 # Use Ubuntu as the base image
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
-# Prevent interactive prompts during installation
+# Set environment variables to avoid interactive prompts
 ENV DEBIAN_FRONTEND=noninteractive
+ENV DISPLAY=:99 
 
-# Install system dependencies
+# Install dependencies, Chromium, and required libraries
 RUN apt-get update && apt-get install -y \
-    wget \
-    curl \
-    unzip \
-    xvfb \
-    xauth \
-    libxrender1 \
-    libxext6 \
-    libxi6 \
     python3 \
     python3-pip \
     python3-tk \
+    python3-dev \
+    wget \
+    curl \
+    unzip \
     chromium-browser \
-    x11vnc \
-    && apt-get clean
-
-# Install ChromeDriver for Selenium
-RUN wget -q https://chromedriver.storage.googleapis.com/113.0.5672.63/chromedriver_linux64.zip \
-    && unzip chromedriver_linux64.zip \
-    && mv chromedriver /usr/local/bin/ \
-    && chmod +x /usr/local/bin/chromedriver \
-    && rm chromedriver_linux64.zip
-
-# Set up the display environment
-ENV DISPLAY=:99
+    xvfb \
+    x11-utils \
+    xauth \
+    dbus-x11 \
+    libxi6 \
+    libgconf-2-4 \
+    libnss3 \
+    libxss1 \
+    libappindicator3-1 \
+    libasound2 \
+    fonts-liberation \
+    libgbm-dev \
+    libu2f-udev \
+    xdg-utils \
+    gnupg \
+    ca-certificates \
+    tini
 
 # Install Python dependencies
-COPY requirements.txt /app/requirements.txt
 WORKDIR /app
+COPY requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-# Copy the application code
-COPY . /app
+# Copy application files
+COPY . .
 
-# Expose Flask API and VNC server ports
-EXPOSE 5000 5900
+# Expose the port Flask runs on
+EXPOSE 5000
 
-# Start Xvfb, VNC server, and the Flask app
-CMD ["sh", "-c", "Xvfb :99 -screen 0 1920x1080x24 -nolisten tcp -ac & x11vnc -display :99 -N -forever -rfbport 5900 & python3 app.py"]
+# Use tini as the entrypoint to prevent process hanging
+ENTRYPOINT ["/usr/bin/tini", "--"]
+
+# Start the application using xvfb-run with proper arguments
+CMD ["xvfb-run", "--server-args=-ac -noreset -screen 0 1920x1080x24", "python3", "main.py"]

@@ -1,5 +1,11 @@
-Srno,No. of Instances,OS with version,Machine Class,Machine Family,Series,Machine Type,vCPUs,RAM,BootDisk Capacity,Gpu no,Gpu Type,WorkStation,Datacenter Location,Avg no. of hrs,Hrs/Min,Days/Month,Unnamed: 17,Unnamed: 18,Unnamed: 19,Unnamed: 20,Unnamed: 21,Unnamed: 22
-39,1.0,"Free: Debian, CentOS, CoreOS, Ubuntu or BYOL",preemptible,general purpose,N2D,e2-standard-2,4,16,,,,,asia-south1,359.0,,hours,month,,,,,]
-46,1.5,"Free: Debian, CentOS, CoreOS, Ubuntu or BYOL",preemptible,general purpose,N1,custom,2,16,,,,,asia-south1,,,,,,,,,
-47,2.4,"Free: Debian, CentOS, CoreOS, Ubuntu or BYOL",preemptible,general purpose,N1,custom,2,16,,,,,asia-south1,,,,,,,,,
-48,7.2,"Free: Debian, CentOS, CoreOS, Ubuntu or BYOL",preemptible,general purpose,N1,custom,2,16,,,,,asia-south1,,,,,,,,,
+Srno,No. of Instances,OS with version,Machine Class,Machine Family,Series,Machine Type,vCPUs,RAM,BootDisk Type,BootDisk Capacity,Gpu no,Gpu Type,WorkStation,Datacenter Location,Avg no. of hrs,Hrs/Min,Days/Month,Zonal/Regional,HDD,SSD,Balanced SSD,Snapshot
+11,2.04,"Free: Debian, CentOS, CoreOS, Ubuntu or BYOL",preemptive,general purpose,N1,custom,4.0,8.0,,,,,,asia-south1,,,,,,,,
+12,2.04,"Free: Debian, CentOS, CoreOS, Ubuntu or BYOL",,general purpose,E2,e2-standard-2,4.0,16.0,,,,,,asia-south1,,,,,,,,
+13,1.02,"Free: Debian, CentOS, CoreOS, Ubuntu or BYOL",,general purpose,N2D,e2-standard-2,8.0,32.0,,,,,,asia-south1,,,,,,,,
+14,1.02,"Free: Debian, CentOS, CoreOS, Ubuntu or BYOL",,general purpose,N2D,e2-standard-2,8.0,32.0,,,,,,asia-south1,,,,,,,,
+15,1.02,Paid: Windows Server,,general purpose,E2,e2-standard-2,2.0,8.0,,,,,,asia-south1,,,,,,,,
+16,1.0,Paid: Windows Server,,general purpose,E2,e2-standard-2,4.0,16.0,,,,,,asia-south1,34.0,hours,month,,,,,
+17,1.02,Paid: Windows Server,,general purpose,E2,e2-standard-2,8.0,32.0,,,,,,asia-south1,,,,,,,,
+18,1.0,"Free: Debian, CentOS, CoreOS, Ubuntu or BYOL",,general purpose,E2,e2-micro,,,,,,,,europe-north1,1.0,hours,month,,,,,
+19,1.02,"Free: Debian, CentOS, CoreOS, Ubuntu or BYOL",,general purpose,E2,e2-medium,,,,,,,,us-east4,,,,,,,,
+20,2.04,"Free: Debian, CentOS, CoreOS, Ubuntu or BYOL",,general purpose,E2,e2-standard-2,2.0,8.0,,,,,,us-east4,,,,,,,,
