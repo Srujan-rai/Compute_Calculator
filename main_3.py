@@ -173,20 +173,21 @@ def process_csv(input_file, output_file):
             lambda x: map_os(str(x).strip(), os_mapping) if pd.notnull(x) else x
         )
 
-    if 'Machine Family' in df.columns and df['Machine Family'].notna().any():
-        df['Machine Family'] = df['Machine Family'].apply(
-            lambda x: map_value(str(x).strip(), knowledge_base) if pd.notnull(x) else x
-        )
-    
-    if 'Series' in df.columns and df['Series'].notna().any():
-        df['Series'] = df['Series'].apply(
-            lambda x: map_value(str(x).strip(), knowledge_base) if pd.notnull(x) else x
-        )
-    
+    if 'Machine Family' in df.columns:
+        df['Machine Family'] = df['Machine Family'].fillna("general purpose")
+
+    if 'Series' in df.columns:
+        df['Series'] = df['Series'].fillna("E2")
+
     if 'Machine Type' in df.columns:
-        df['Machine Type'] = df['Machine Type'].apply(
-            lambda x: map_value(str(x).strip(), knowledge_base) if pd.notnull(x) else x
-        )
+        df['Machine Type'] = df['Machine Type'].fillna("custom")
+
+    columns_to_map = ["Machine Family", "Series", "Machine Type"]
+
+    for column in columns_to_map:
+        if column in df.columns:
+            df[column] = df[column].apply(lambda x: map_value(str(x).strip(), knowledge_base) if pd.notnull(x) else x)
+
     
     df.to_csv(output_file, index=False)
     print("input file filtered")
@@ -1135,7 +1136,7 @@ def main(sheet_url,recipient_email):
         try:
             
             missing_fields = []
-            required_fields = ["No. of Instances", "Machine Family", "Series", "Datacenter Location", "OS with version"]
+            required_fields = ["No. of Instances",  "Datacenter Location", "OS with version"]
             
             for field in required_fields:
                 if pd.isna(row[field]):
