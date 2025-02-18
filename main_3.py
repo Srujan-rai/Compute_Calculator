@@ -1174,7 +1174,6 @@ def main(sheet_url, recipient_email):
         actions = ActionChains(driver)
         driver.get("https://cloud.google.com/products/calculator")
         driver.implicitly_wait(10)
-       
         home_page(driver,actions)
 
         for row in results:
@@ -1195,6 +1194,8 @@ def main(sheet_url, recipient_email):
                 series = row["Series"]
                 region= row["region"]
 
+                
+                
                 if pricing_type == "on_demand":
                     print(f"Fetching On-Demand price for Row {row['Row Index']}...")
                     
