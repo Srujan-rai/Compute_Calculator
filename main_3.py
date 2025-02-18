@@ -258,7 +258,20 @@ def home_page(driver,actions):
 def handle_instance(driver,actions,no_of_instance,hours_per_day):
     hours_status=False
     
-    for _ in range(6):
+    time.sleep(0.6)
+    pyautogui.hotkey('ctrl', 'f')
+    time.sleep(0.6)
+    
+    pyautogui.typewrite('Instances configuration')
+    time.sleep(0.6)
+    
+    pyautogui.press('esc')
+    time.sleep(0.6)
+    
+    actions.send_keys(Keys.ENTER).perform()
+    
+    
+    for _ in range(2):  #lands at toggle specify  usage  time for each instance
         actions.send_keys(Keys.TAB).perform()
         time.sleep(0.2)
     if hours_per_day < 5 and hours_per_day > 0:
@@ -697,11 +710,29 @@ def add_estimate(driver,actions):
     actions.send_keys(Keys.ENTER).perform()
     
         
-
+def add_to_estimate(driver,actions):
+    time.sleep(6)
+    pyautogui.hotkey('ctrl', 'f')
+    time.sleep(0.6)
+    
+    pyautogui.typewrite('Add to estimate')
+    time.sleep(0.6)
+    
+    pyautogui.press('esc')
+    time.sleep(0.6)
+    
+    actions.send_keys(Keys.ENTER).perform()
+    time.sleep(1)
+    div_element = driver.find_element(By.XPATH, "//div[@class='d5NbRd-EScbFb-JIbuQc PtwYlf' and @data-service-form='8']")
+    actions.move_to_element(div_element).click().perform()
+    time.sleep(2)
+   
+    
+    print("✅ Added to estimate")
 
 
 #=============================================================================================#
-def get_on_demand_pricing( os_name, no_of_instances,hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region,machine_class):
+def get_on_demand_pricing( driver, actions,os_name, no_of_instances,hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region,machine_class):
     print(f"Getting on demand pricing: 🖥️ OS: {os_name}, 🔢 No. of Instances: {no_of_instances}, ⏳ Hours per Day: {hours_per_day}, "
       f"🛠️ Machine Family: {machine_family}, 📊 Series: {series}, 💻 Machine Type: {machine_type}, "
       f"⚙️ vCPU: {vCPU}, 🖥️ RAM: {ram} GB, 💾 Boot Disk Capacity: {boot_disk_capacity} GB, "
@@ -714,23 +745,8 @@ def get_on_demand_pricing( os_name, no_of_instances,hours_per_day, machine_famil
     print(f"os index : {os_index},machine family : {machine_family_index},series index :{series_index},machine type index : {machine_type_index}")
     print(vCPU,ram)
     print("ondemand pricing")
-    download_directory = os.path.join(os.getcwd(), "downloads")
-    os.makedirs(download_directory, exist_ok=True)
-    chrome_options = webdriver.ChromeOptions()
-    prefs = {
-        "download.default_directory": download_directory,
-        "download.prompt_for_download": False,
-        "safebrowsing.enabled": True,
-    }
-    chrome_options.add_experimental_option("prefs", prefs)
-    driver = webdriver.Chrome(options=chrome_options)
-    driver.maximize_window()
-
-    actions = ActionChains(driver)
-    driver.get("https://cloud.google.com/products/calculator")
-    driver.implicitly_wait(10)
     
-    home_page(driver,actions)
+    
     handle_instance(driver,actions,no_of_instances,hours_per_day)
     handle_hours_per_day(driver,actions,hours_per_day)
     #time.sleep(0.6)
@@ -796,7 +812,7 @@ def get_on_demand_pricing( os_name, no_of_instances,hours_per_day, machine_famil
     
     print(price,current_url)
     
-    driver.quit()
+    #driver.quit()
     print("✅ ondemand pricing done")
     
     return current_url, price
@@ -806,7 +822,7 @@ def get_on_demand_pricing( os_name, no_of_instances,hours_per_day, machine_famil
     
     
     
-def get_sud_pricing( os_name, no_of_instances,hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region,machine_class):
+def get_sud_pricing(driver,actions, os_name, no_of_instances,hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region,machine_class):
     print(f"Getting SUD pricing: 🖥️ OS: {os_name}, 🔢 No. of Instances: {no_of_instances}, ⏳ Hours per Day: {hours_per_day}, "
       f"🛠️ Machine Family: {machine_family}, 📊 Series: {series}, 💻 Machine Type: {machine_type}, "
       f"⚙️ vCPU: {vCPU}, 🖥️ RAM: {ram} GB, 💾 Boot Disk Capacity: {boot_disk_capacity} GB, "
@@ -820,23 +836,7 @@ def get_sud_pricing( os_name, no_of_instances,hours_per_day, machine_family, ser
     print(f"os index : {os_index},machine family : {machine_family_index},series index :{series_index},machine type index : {machine_type_index}")
     print(vCPU,ram)
     print("sud pricing")
-    download_directory = os.path.join(os.getcwd(), "downloads")
-    os.makedirs(download_directory, exist_ok=True)
-    chrome_options = webdriver.ChromeOptions()
-    prefs = {
-        "download.default_directory": download_directory,
-        "download.prompt_for_download": False,
-        "safebrowsing.enabled": True,
-    }
-    chrome_options.add_experimental_option("prefs", prefs)
-    driver = webdriver.Chrome(options=chrome_options)
-    driver.maximize_window()
 
-    actions = ActionChains(driver)
-    driver.get("https://cloud.google.com/products/calculator")
-    driver.implicitly_wait(10)
-    
-    home_page(driver,actions)
     handle_instance(driver,actions,no_of_instances,hours_per_day)
     #time.sleep(0.6)
     handle_hours_per_day(driver,actions,hours_per_day)
@@ -904,13 +904,13 @@ def get_sud_pricing( os_name, no_of_instances,hours_per_day, machine_family, ser
     
     print(price,current_url)
     
-    driver.quit()
+    #driver.quit()
     print("✅ sud pricing done")
     
     return current_url, price   
     
     
-def get_one_year_pricing(os_name, no_of_instances,hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region,machine_class):
+def get_one_year_pricing(driver,actions,os_name, no_of_instances,hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region,machine_class):
     print(f"Getting one year pricing: 🖥️ OS: {os_name}, 🔢 No. of Instances: {no_of_instances}, ⏳ Hours per Day: {hours_per_day}, "
       f"🛠️ Machine Family: {machine_family}, 📊 Series: {series}, 💻 Machine Type: {machine_type}, "
       f"⚙️ vCPU: {vCPU}, 🖥️ RAM: {ram} GB, 💾 Boot Disk Capacity: {boot_disk_capacity} GB, "
@@ -940,7 +940,7 @@ def get_one_year_pricing(os_name, no_of_instances,hours_per_day, machine_family,
     driver.get("https://cloud.google.com/products/calculator")
     driver.implicitly_wait(10)
     
-    home_page(driver,actions)
+    #home_page(driver,actions)
     handle_instance(driver,actions,no_of_instances,hours_per_day)
     #time.sleep(0.6)
     handle_hours_per_day(driver,actions,hours_per_day)
@@ -1010,12 +1010,12 @@ def get_one_year_pricing(os_name, no_of_instances,hours_per_day, machine_family,
     
     print(price,current_url)
     
-    driver.quit()
+    #driver.quit()
     print("✅ one year pricing done")
     
     return current_url, price
 
-def  get_three_year_pricing(os_name, no_of_instances,hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region,machine_class):
+def get_three_year_pricing(driver,actions,os_name, no_of_instances,hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region,machine_class):
     print(f"Getting three year pricing: 🖥️ OS: {os_name}, 🔢 No. of Instances: {no_of_instances}, ⏳ Hours per Day: {hours_per_day}, "
       f"🛠️ Machine Family: {machine_family}, 📊 Series: {series}, 💻 Machine Type: {machine_type}, "
       f"⚙️ vCPU: {vCPU}, 🖥️ RAM: {ram} GB, 💾 Boot Disk Capacity: {boot_disk_capacity} GB, "
@@ -1045,7 +1045,7 @@ def  get_three_year_pricing(os_name, no_of_instances,hours_per_day, machine_fami
     driver.get("https://cloud.google.com/products/calculator")
     driver.implicitly_wait(10)
     
-    home_page(driver,actions)
+    #home_page(driver,actions)
     handle_instance(driver,actions,no_of_instances,hours_per_day)
     #time.sleep(0.6)
     handle_hours_per_day(driver,actions,hours_per_day)
@@ -1115,7 +1115,7 @@ def  get_three_year_pricing(os_name, no_of_instances,hours_per_day, machine_fami
     
     print(price,current_url)
     
-    driver.quit()
+    #driver.quit()
     
     print("✅ three year pricing done")
     
@@ -1125,23 +1125,23 @@ def  get_three_year_pricing(os_name, no_of_instances,hours_per_day, machine_fami
 #=============================================================================================#
 
 
-def main(sheet_url,recipient_email):
+def main(sheet_url, recipient_email):
     download_sheet(sheet_url)
 
     process_csv(input_file, output_file_filtered)
     sheet = pd.read_csv(input_filtered_file)
     results = []
 
+    # Preload row data to avoid redundant parsing
     for index, row in sheet.iterrows():
         try:
-            
             missing_fields = []
-            required_fields = ["No. of Instances",  "Datacenter Location", "OS with version"]
-            
+            required_fields = ["No. of Instances", "Datacenter Location", "OS with version"]
+
             for field in required_fields:
                 if pd.isna(row[field]):
                     missing_fields.append(field)
-            
+
             if missing_fields:
                 print(f"Skipping row {index + 1}: Missing required fields ({', '.join(missing_fields)})")
                 results.append({
@@ -1150,33 +1150,20 @@ def main(sheet_url,recipient_email):
                     "Error": f"Missing required fields: {', '.join(missing_fields)}"
                 })
                 continue
-        
-            os_name = row["OS with version"]
-            print(os_name)
-            no_of_instances = round(float(row["No. of Instances"]), 2) if pd.notna(row["No. of Instances"]) else 0.00
-            machine_family = row["Machine Family"].lower() if pd.notna(row["Machine Family"]) else "general purpose"
-            series = row["Series"].upper() if pd.notna(row["Series"]) else "E2"
-            machine_type = row["Machine Type"].lower() if pd.notna(row["Machine Type"]) else "custom"
-            vCPU = row["vCPUs"] if pd.notna(row["vCPUs"]) else 0
-            ram = row["RAM"] if pd.notna(row["RAM"]) else 0
-            boot_disk_capacity = row["BootDisk Capacity"] if pd.notna(row["BootDisk Capacity"]) else 0
-            region = row["Datacenter Location"] if pd.notna(row["Datacenter Location"]) else "Mumbai"
-            hours_per_day = int(row["Avg no. of hrs"]) if pd.notna(row["Avg no. of hrs"]) else 730
-            machine_class = str(row["Machine Class"]) if pd.notna(row["Machine Class"]) else "regular"
-            #print(hours_per_day)
-            machine_class=machine_class.lower()
-            
-            '''if hours_per_day <730:
-                same_costing=True'''
-            
-            print(f"Processing row {index + 1} with OS: {os_name}, Instances: {no_of_instances}, machine family: {machine_family}, series: {series}, machine type: {machine_type}")
 
             row_result = {
                 "Row Index": index + 1,
-                "OS with version": os_name,
-                "No. of Instances": no_of_instances,
-                "Machine Family": machine_family,
-                "Machine type":machine_type,
+                "OS with version": row["OS with version"],
+                "No. of Instances": round(float(row["No. of Instances"]), 2) if pd.notna(row["No. of Instances"]) else 0.00,
+                "Machine Family": row["Machine Family"].lower() if pd.notna(row["Machine Family"]) else "general purpose",
+                "Series": row["Series"].upper() if pd.notna(row["Series"]) else "E2",
+                "Machine Type": row["Machine Type"].lower() if pd.notna(row["Machine Type"]) else "custom",
+                "vCPUs": row["vCPUs"] if pd.notna(row["vCPUs"]) else 0,
+                "RAM": row["RAM"] if pd.notna(row["RAM"]) else 0,
+                "BootDisk Capacity": row["BootDisk Capacity"] if pd.notna(row["BootDisk Capacity"]) else 0,
+                "region": row["Datacenter Location"] if pd.notna(row["Datacenter Location"]) else "Mumbai",
+                "Avg no. of hrs": int(row["Avg no. of hrs"]) if pd.notna(row["Avg no. of hrs"]) else 730,
+                "Machine Class": row["Machine Class"].lower() if pd.notna(row["Machine Class"]) else "regular",
                 "On-Demand URL": None,
                 "On-Demand Price": None,
                 "SUD URL": None,
@@ -1187,99 +1174,114 @@ def main(sheet_url,recipient_email):
                 "3-Year Price": None
             }
 
-            for iteration in range(4):  
-                try:
-                    
-                    
-                    
-                    if  machine_class=="preemptible": #if it is less than on demand price  ///////even if it greater then 730 and (spot/premtible eny condition the price is ondemand)
-                        if iteration==0:
-                            print(f"Iteration {iteration + 1}: Getting on-demand price and link (e2-micro)")
-                            row_result["On-Demand URL"], row_result["On-Demand Price"] = get_on_demand_pricing(
-                                os_name, no_of_instances, hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region,machine_class
-                            )
-
-                        if iteration==1:
-                            
-                            print(f"Iteration {iteration + 1}: Getting sustained use discount (SUD) price and link")
-                            row_result["SUD URL"], row_result["SUD Price"] = row_result["On-Demand URL"], row_result["On-Demand Price"]
-                            
-                            row_result["1-Year URL"], row_result["1-Year Price"] = row_result["SUD URL"], row_result["SUD Price"]
-                            row_result["3-Year URL"], row_result["3-Year Price"] = row_result["SUD URL"], row_result["SUD Price"]
-                            break
-                        
-                    if  machine_class=="regular" and hours_per_day < 730:
-                        if iteration==0:
-                            print(f"Iteration {iteration + 1}: Getting on-demand price and link (e2-micro)")
-                            row_result["On-Demand URL"], row_result["On-Demand Price"] = get_on_demand_pricing(
-                                os_name, no_of_instances, hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region,machine_class
-                            )
-
-                        if iteration==1:
-                            
-                            print(f"Iteration {iteration + 1}: Getting sustained use discount (SUD) price and link")
-                            row_result["SUD URL"], row_result["SUD Price"] = get_sud_pricing(
-                                os_name, no_of_instances, hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region,machine_class
-                            )
-                            
-                            row_result["1-Year URL"], row_result["1-Year Price"] = row_result["SUD URL"], row_result["SUD Price"]
-                            row_result["3-Year URL"], row_result["3-Year Price"] = row_result["SUD URL"], row_result["SUD Price"]
-                            break
-                    
-                    
-                    else:
-                        if iteration == 0:
-                            print(f"Iteration {iteration + 1}: Getting on-demand price and link")
-                            row_result["On-Demand URL"], row_result["On-Demand Price"] = get_on_demand_pricing(
-                                os_name, no_of_instances, hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region,machine_class
-                            )
-                        elif iteration == 1:
-                            if series=="E2":
-                                print(f"Iteration {iteration + 1}: Getting sustained use discount (SUD) price and link")
-                                row_result["SUD URL"], row_result["SUD Price"] = row_result["On-Demand URL"], row_result["On-Demand Price"] 
-                                
-                            
-                            else:
-                                print(f"Iteration {iteration + 1}: Getting sustained use discount (SUD) price and link")
-                                row_result["SUD URL"], row_result["SUD Price"] = get_sud_pricing(
-                                    os_name, no_of_instances, hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region,machine_class
-                                )
-                        elif iteration == 2:
-                            print(f"Iteration {iteration + 1}: Getting 1-year commitment price and link")
-                            row_result["1-Year URL"], row_result["1-Year Price"] = get_one_year_pricing(
-                                os_name, no_of_instances, hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region,machine_class
-                            )
-                        elif iteration == 3:
-                            print(f"Iteration {iteration + 1}: Getting 3-year commitment price and link")
-                            row_result["3-Year URL"], row_result["3-Year Price"] = get_three_year_pricing(
-                                os_name, no_of_instances, hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region,machine_class
-                            )
-                except Exception as e:
-                    print(f"Error processing row {index + 1}, iteration {iteration + 1}: {e}")
-                    if iteration == 0:
-                        row_result["On-Demand URL"] = "Error"
-                        row_result["On-Demand Price"] = "Error"
-                    elif iteration == 1:
-                        row_result["SUD URL"] = "Error"
-                        row_result["SUD Price"] = "Error"
-                    elif iteration == 2:
-                        row_result["1-Year URL"] = "Error"
-                        row_result["1-Year Price"] = "Error"
-                    elif iteration == 3:
-                        row_result["3-Year URL"] = "Error"
-                        row_result["3-Year Price"] = "Error"
-                finally:
-                    time.sleep(2)
-
             results.append(row_result)
-        
+
         except Exception as e:
-            print(f"Critical error processing row {index + 1}: {e}")
-            results.append({
-                "Row Index": index + 1, 
-                "OS with version": row["OS with version"] if pd.notna(row["OS with version"]) else "Unknown", 
-                "Error": str(e)
-             })
+            print(f"Error processing row {index + 1}: {e}")
+
+    # Processing all rows for each pricing type sequentially
+    pricing_types = ["on_demand", "sud", "cud1", "cud3"]
+
+    for pricing_type in pricing_types:
+        print(f"\nStarting {pricing_type.upper()} pricing calculation for all rows...\n")
+
+        # Open the WebDriver once per pricing type
+        download_directory = os.path.join(os.getcwd(), "downloads")
+        os.makedirs(download_directory, exist_ok=True)
+        chrome_options = webdriver.ChromeOptions()
+        prefs = {
+        "download.default_directory": download_directory,
+        "download.prompt_for_download": False,
+        "safebrowsing.enabled": True,
+        }
+        chrome_options.add_experimental_option("prefs", prefs)
+        driver = webdriver.Chrome(options=chrome_options)
+        driver.maximize_window()
+
+        actions = ActionChains(driver)
+        driver.get("https://cloud.google.com/products/calculator")
+        driver.implicitly_wait(10)
+       
+        home_page(driver,actions)
+
+        for row in results:
+            try:
+                
+                os_name = row["OS with version"]
+                no_of_instances = row["No. of Instances"]
+                hours_per_day = row["Avg no. of hrs"]
+                machine_family = row["Machine Family"]
+                series = row["Series"]
+                machine_type = row["Machine Type"]
+                vCPU = row["vCPUs"]
+                ram = row["RAM"]
+                boot_disk_capacity = row["BootDisk Capacity"]
+                region = row["region"]
+                machine_class = row["Machine Class"]
+                hours_per_day = row["Avg no. of hrs"]
+                series = row["Series"]
+                region= row["region"]
+
+                if pricing_type == "on_demand":
+                    print(f"Fetching On-Demand price for Row {row['Row Index']}...")
+                    
+                    row["On-Demand URL"], row["On-Demand Price"] = get_on_demand_pricing(driver,actions,os_name, no_of_instances, hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region,machine_class
+                    )
+
+                elif pricing_type == "sud":
+                    if machine_class == "preemptible":
+                        row["SUD URL"], row["SUD Price"] = row["On-Demand URL"], row["On-Demand Price"]
+                        row["1-Year URL"], row["1-Year Price"] = row["SUD URL"], row["SUD Price"]
+                        row["3-Year URL"], row["3-Year Price"] = row["SUD URL"], row["SUD Price"]
+                        continue
+
+                    elif machine_class == "regular" and hours_per_day < 730:
+                        print(f"Fetching SUD price for Row {row['Row Index']}...")
+                        row["SUD URL"], row["SUD Price"] = get_sud_pricing(driver,actions,os_name, no_of_instances, hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region,machine_class
+                        )
+                        row["1-Year URL"], row["1-Year Price"] = row["SUD URL"], row["SUD Price"]
+                        row["3-Year URL"], row["3-Year Price"] = row["SUD URL"], row["SUD Price"]
+                        continue
+
+                    elif series == "E2":
+                        row["SUD URL"], row["SUD Price"] = row["On-Demand URL"], row["On-Demand Price"]
+
+                    else:
+                        print(f"Fetching SUD price for Row {row['Row Index']}...")
+                        row["SUD URL"], row["SUD Price"] = get_sud_pricing(driver,actions,os_name, no_of_instances, hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region,machine_class
+                        )
+
+                elif pricing_type == "cud1":
+                    if machine_class == "preemptible":
+                        row["1-Year URL"], row["1-Year Price"] = row["SUD URL"], row["SUD Price"]
+                        continue
+
+                    print(f"Fetching 1-Year CUD price for Row {row['Row Index']}...")
+                    row["1-Year URL"], row["1-Year Price"] = get_one_year_pricing(driver,actions,os_name, no_of_instances, hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region,machine_class
+                    )
+
+                elif pricing_type == "cud3":
+                    if machine_class == "preemptible":
+                        row["3-Year URL"], row["3-Year Price"] = row["SUD URL"], row["SUD Price"]
+                        continue
+
+                    print(f"Fetching 3-Year CUD price for Row {row['Row Index']}...")
+                    row["3-Year URL"], row["3-Year Price"] = get_three_year_pricing(driver,actions,
+                            os_name, no_of_instances, hours_per_day, machine_family, series, machine_type, vCPU, ram, boot_disk_capacity, region,machine_class
+                        )
+                
+                
+                if int(row['Row Index']) < len(results):
+                    add_to_estimate(driver, actions)
+
+            except Exception as e:
+                print(f"Error processing {pricing_type.upper()} for Row {row['Row Index']}: {e}")
+                row[f"{pricing_type.upper()} URL"] = "Error"
+                row[f"{pricing_type.upper()} Price"] = "Error"
+               
+        print(f"\nCompleted {pricing_type.upper()} pricing calculation.\n")
+    driver.quit()
+
 
     output_file = "output_results.xlsx"  # Excel file extension
 
@@ -1303,5 +1305,4 @@ def run_automation():
 
 
 if __name__ == "__main__":
-    
     app.run(debug=True,use_reloader=False,host='0.0.0.0')
