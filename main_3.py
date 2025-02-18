@@ -108,7 +108,8 @@ def download_sheet(sheet_url):
         try:
             print("downloading the sheet !!")
             sheet_id = extract_sheet_id(sheet_url)
-            csv_url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=csv"
+            tab_name = "ComputeEngine"
+            csv_url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/gviz/tq?tqx=out:csv&sheet={tab_name}"
             response = requests.get(csv_url)
 
             if response.status_code == 200:
@@ -924,21 +925,7 @@ def get_one_year_pricing(driver,actions,os_name, no_of_instances,hours_per_day, 
     print(f"os index : {os_index},machine family : {machine_family_index},series index :{series_index},machine type index : {machine_type_index}")
     print(vCPU,ram)
     print("one year pricing")
-    download_directory = os.path.join(os.getcwd(), "downloads")
-    os.makedirs(download_directory, exist_ok=True)
-    chrome_options = webdriver.ChromeOptions()
-    prefs = {
-        "download.default_directory": download_directory,
-        "download.prompt_for_download": False,
-        "safebrowsing.enabled": True,
-    }
-    chrome_options.add_experimental_option("prefs", prefs)
-    driver = webdriver.Chrome(options=chrome_options)
-    driver.maximize_window()
-
-    actions = ActionChains(driver)
-    driver.get("https://cloud.google.com/products/calculator")
-    driver.implicitly_wait(10)
+    
     
     #home_page(driver,actions)
     handle_instance(driver,actions,no_of_instances,hours_per_day)
@@ -1029,21 +1016,7 @@ def get_three_year_pricing(driver,actions,os_name, no_of_instances,hours_per_day
     print(f"os index : {os_index},machine family : {machine_family_index},series index :{series_index},machine type index : {machine_type_index}")
     print(vCPU,ram)
     print("three year  pricing")
-    download_directory = os.path.join(os.getcwd(), "downloads")
-    os.makedirs(download_directory, exist_ok=True)
-    chrome_options = webdriver.ChromeOptions()
-    prefs = {
-        "download.default_directory": download_directory,
-        "download.prompt_for_download": False,
-        "safebrowsing.enabled": True,
-    }
-    chrome_options.add_experimental_option("prefs", prefs)
-    driver = webdriver.Chrome(options=chrome_options)
-    driver.maximize_window()
-
-    actions = ActionChains(driver)
-    driver.get("https://cloud.google.com/products/calculator")
-    driver.implicitly_wait(10)
+    
     
     #home_page(driver,actions)
     handle_instance(driver,actions,no_of_instances,hours_per_day)
