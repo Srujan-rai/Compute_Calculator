@@ -768,7 +768,7 @@ def get_on_demand_pricing( driver, actions,os_name, no_of_instances,hours_per_da
                 ram_limits = {
                 'N1': 13,
                 'N2': 16,
-                'N2D': 16,
+                'N2D': 32,
                 'N4': 16,
                 'E2': 16
                 }
@@ -859,7 +859,7 @@ def get_sud_pricing(driver,actions, os_name, no_of_instances,hours_per_day, mach
                 ram_limits = {
                 'N1': 13,
                 'N2': 16,
-                'N2D': 16,
+                'N2D': 32,
                 'N4': 16,
                 'E2': 16
                 }
@@ -950,7 +950,7 @@ def get_one_year_pricing(driver,actions,os_name, no_of_instances,hours_per_day, 
                 ram_limits = {
                 'N1': 13,
                 'N2': 16,
-                'N2D': 16,
+                'N2D': 32,
                 'N4': 16,
                 'E2': 16
                 }
@@ -1041,7 +1041,7 @@ def get_three_year_pricing(driver,actions,os_name, no_of_instances,hours_per_day
                 ram_limits = {
                 'N1': 13,
                 'N2': 16,
-                'N2D': 16,
+                'N2D': 32,
                 'N4': 16,
                 'E2': 16
                 }
